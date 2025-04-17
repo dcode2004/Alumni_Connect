@@ -15,9 +15,11 @@ import Alert from "@/components/common/Alert";
 import Loading from "@/components/common/Loading";
 import EditOption from "./EditOption";
 import ProfileEditModal from "../modal/ProfileEditModal";
+import FollowListModal from "../modal/FollowListModal";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Link from "next/link";
+import { getFollowers, getFollowing, followUser, unfollowUser } from "@/services/followService";
 
 const Profile = () => {
   const { activeUser, loginStatus, logOutUser, fetchActiveUser, setLoginStatus } = useContext(activeUserAndLoginContext);
@@ -50,6 +52,78 @@ const Profile = () => {
     setModalType(modalType);
   }
 
+  // New state for follow functionality
+  const [followModal, setFollowModal] = useState({ open: false, type: null });
+  const [followList, setFollowList] = useState([]);
+  const [loadingStates, setLoadingStates] = useState({});
+
+  // Function to fetch followers or following
+  const fetchFollowList = async (type) => {
+    try {
+      setLoading(true);
+      const response = type === 'followers' 
+        ? await getFollowers(activeUser._id)
+        : await getFollowing(activeUser._id);
+      setFollowList(response.success ? response[type] : []);
+    } catch (error) {
+      setAlert({
+        type: "error",
+        message: error.message || "Failed to fetch follow list"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle follow/unfollow action
+  const handleFollowAction = async (targetUserId) => {
+    try {
+      setLoadingStates(prev => ({ ...prev, [targetUserId]: true }));
+      
+      if (followModal.type === 'following') {
+        await unfollowUser(targetUserId);
+        setFollowList(prev => prev.filter(user => user._id !== targetUserId));
+      } else {
+        await followUser(targetUserId);
+        setFollowList(prev => 
+          prev.map(user => 
+            user._id === targetUserId 
+              ? { ...user, isFollowing: true }
+              : user
+          )
+        );
+      }
+      
+      // Refresh active user data to update follow counts
+      await fetchActiveUser();
+      
+      setAlert({
+        type: "success",
+        message: followModal.type === 'following' 
+          ? "User unfollowed successfully"
+          : "User followed successfully"
+      });
+    } catch (error) {
+      setAlert({
+        type: "error",
+        message: error.message || "Failed to update follow status"
+      });
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [targetUserId]: false }));
+    }
+  };
+
+  // Function to open follow modal
+  const openFollowModal = async (type) => {
+    setFollowModal({ open: true, type });
+    await fetchFollowList(type);
+  };
+
+  // Function to close follow modal
+  const closeFollowModal = () => {
+    setFollowModal({ open: false, type: null });
+    setFollowList([]);
+  };
 
   return (
     <>
@@ -58,10 +132,21 @@ const Profile = () => {
           <>
             {/* ---- Loading -----  */}
             {loading && <Loading />}
+            {alert && <Alert alert={alert} />}
 
             <div className={styles.registration_main_container}>
-
               {modal && <ProfileEditModal userDetails={activeUser} closeModal={closeModal} modalType={modalType} />}
+              
+              {/* Follow List Modal */}
+              <FollowListModal
+                open={followModal.open}
+                onClose={closeFollowModal}
+                title={followModal.type === 'followers' ? 'Followers' : 'Following'}
+                users={followList}
+                type={followModal.type}
+                onFollowAction={handleFollowAction}
+                loadingStates={loadingStates}
+              />
 
               {/* top heading of form */}
               <div className={styles.register_top_container}>
@@ -89,6 +174,39 @@ const Profile = () => {
                         sx={{ width: 250, height: 250 }}
                       />
                     </div>
+                  </div>
+                  {/* Follow buttons */}
+                  <div className="flex justify-center gap-4 mt-4 mb-2">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => openFollowModal('following')}
+                      sx={{
+                        borderColor: '#3584FC',
+                        color: '#3584FC',
+                        '&:hover': {
+                          borderColor: '#3584FC',
+                          backgroundColor: 'rgba(53, 132, 252, 0.04)'
+                        }
+                      }}
+                    >
+                      Following {activeUser.following?.length > 0 && `(${activeUser.following.length})`}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => openFollowModal('followers')}
+                      sx={{
+                        borderColor: '#3584FC',
+                        color: '#3584FC',
+                        '&:hover': {
+                          borderColor: '#3584FC',
+                          backgroundColor: 'rgba(53, 132, 252, 0.04)'
+                        }
+                      }}
+                    >
+                      Followers {activeUser.followers?.length > 0 && `(${activeUser.followers.length})`}
+                    </Button>
                   </div>
                   <EditOption className="flex justify-center mt-5" onClick={() => { showModal("profilePicture") }} editText={"Edit Profile picture"} />
                 </div>
