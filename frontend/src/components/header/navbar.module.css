@@ -1,0 +1,172 @@
+.navbar{
+    /* background-color: white; */
+    /* background-color: rgb(16, 16, 16); */
+    background-color: rgba(0, 0, 0, 0.863);
+    backdrop-filter: blur(0.7rem);
+    /* backdrop-filter: blur(0.6rem); */
+    width: 100%;
+    /* max-width: 1400px; */
+    height: 10vh;
+    max-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    margin: 0 auto;
+    z-index: 100;
+}
+.navbar > * {
+    /* color: black !important; */
+    color: rgb(255, 255, 255) !important;
+}
+.navbar .navbar_container{
+    width: 98%;
+    height: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* --------Logog ------------- */
+.navbar .navbar_container .logo{
+    margin: 0 1.5rem 0 0.5rem;
+}
+.logo :link{
+    text-decoration: none;   
+    color: rgb(255, 255, 255) !important;
+    /* color: black; */
+}
+.navbar ul.nav_item{
+    display: flex;
+}
+.navbar ul.nav_item li{
+  list-style-type: none;
+  margin-right: 1rem;
+}
+/* .navbar ul.nav_item li :link{
+    text-decoration: none;
+    color: rgb(255, 255, 255) ;
+}
+.navbar ul.nav_item li :link:visited{
+    color: inherit;
+}
+.navbar a{
+    color: rgb(255, 255, 255) ;
+} */
+.avatar_name_for_responsive_nav{
+    margin-bottom: 2rem;
+}
+.login_link,.registration_link, .logout_btn{
+   border-radius: 1rem;
+   padding:0.5rem 1rem 0.5rem 1rem;
+   margin-right: 0.8rem;
+   font-size: 0.9rem;
+   cursor: pointer;
+}
+.login_link{
+    background-color:#7CC5FA;
+}
+.registration_link, .logout_btn{
+    border: 2px solid #3584FC ;
+}
+.avatar_name_for_desktop{
+    display: flex;
+    cursor: pointer;
+}
+/* -- div box containing user name & profile picture */
+div.logedIn_user{
+    display: flex;
+    align-items: center;
+}
+div.logedIn_user .avatar{
+    cursor: pointer;
+}
+
+.hamburger_menu{
+    font-size: 2rem;
+    margin-right: 0.5rem;
+    display: none;
+}
+/* ------------Responsive nav bar ------------- */
+.responsive_nav{
+    display: none;
+    position: absolute;
+    top: 0;
+    left:0;
+    transform: translateX(-100%);
+    transition: ease-in-out all 0.5s;
+    min-height: 100vh;
+    width: 100%;
+    /* background-color: #D9D9D9; */
+    background-color: rgb(16, 16, 16);
+    overflow: scroll;
+    padding: 2rem 0 0.5rem 2rem;
+}
+.avatar_name_for_responsive_nav{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.user_name{
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.avatar{
+    margin-right: 0.5rem;
+}
+.verification_status{
+    font-size: 0.8rem;
+    color: #878686;
+    display: flex;
+    align-items: center;
+}
+.responsive_nav ul{
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
+}
+.responsive_nav ul li{
+    list-style-type: none;
+    margin: 0.8rem 0 0.8rem 0;
+}
+.responsive_nav .cross_hamburger_menu{
+   position: absolute;
+   right: 1rem;
+   top: 0.5rem;
+   font-size: 2rem;
+}
+
+/* ---------------- ALL RESPONSIVE CSS -------------- */
+/* ----------- Below 1000px ------------- */
+@media only screen and (max-width: 1000px) {
+      .logo :link{
+        font-size: 1.2rem;
+      }
+      .navbar ul.nav_item li :link{
+        font-size: 0.95rem;
+      }
+      .user_name{
+        font-size: 0.95rem;
+      }
+      .login_link,.registration_link, .logout_btn{
+        font-size: 0.8rem;
+      }
+}
+
+/* ----------- Below 850px (Apple Ipad Air) ------------- */
+@media only screen and (max-width: 850px) {
+   .nav_item{
+      display: none !important;
+      background-color: #2EF20E;
+   }
+   .login_credentials{
+    display: none;
+   }
+   .hamburger_menu{
+    display: block;
+   }
+   .responsive_nav{
+    display: block;
+   }
+}
+

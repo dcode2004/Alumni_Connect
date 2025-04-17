@@ -1,0 +1,57 @@
+@tailwind base; 
+/* This above line is overriding the REACT MUI styles */
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Colors Combinations */
+/* 
+#7CC5FA;
+#3584FC;
+#D9D9D9;
+*/
+/* --- Z-Index --- */
+/* 
+  Loader component : 1001
+  alertBox : 100
+*/
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  /* color:#8eb8f8; */
+}
+section.page_section{
+  width: 100%;
+  min-height: 100vh;
+  /* max-width: 1700px; */
+  margin: 0 auto;
+
+}
+.alert_container{
+  position: fixed;
+  width: 100%;
+  top: 20;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+.loading_component{
+  position: fixed;
+  z-index: 1001;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  background-color: rgba(242, 235, 235, 0.774);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.disabled_link_text{
+  color: rgba(128, 128, 128, 0.534) !important;
+  cursor: default;
+}
