@@ -86,10 +86,24 @@ router.post("/createNewBatch", authorizeUser, async (req, res) => {
 router.get("/fetchAllBatch", authorizeUser, async (req, res) => {
   try {
     const findAllBatch = await Batch.find({ branch: "CSE" });
+
+    // Get actual registered count for each batch
+    const batchesWithCount = await Promise.all(
+      findAllBatch.map(async (batch) => {
+        const registeredCount = await User.countDocuments({
+          batchId: batch._id,
+        });
+        return {
+          ...batch.toObject(),
+          totalRegistered: registeredCount,
+        };
+      })
+    );
+
     res.json({
       success: true,
       message: "All batches sent",
-      batches: findAllBatch,
+      batches: batchesWithCount,
     });
   } catch (error) {
     console.log(error);
