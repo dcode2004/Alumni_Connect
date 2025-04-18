@@ -81,12 +81,12 @@ const NavBar = () => {
               <Link
                 // className={`${currentUrlPath === "/notes" && 'text-sky-500'}`}
                 className={`${
-                  currentUrlPath.startsWith("/notes") && "text-sky-500"
+                  currentUrlPath.startsWith("/posts") && "text-sky-500"
                 }`}
                 shallow={true}
-                href="/notes"
+                href="/posts"
               >
-                Notes
+                Posts
               </Link>
             </li>
             <li>

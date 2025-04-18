@@ -2,29 +2,71 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const postSchema = new Schema({
-  postType:{
-    type: String
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  authorId : {
-    type : Schema.ObjectId,
+  content: {
+    type: String,
+    required: true,
+    trim: true,
   },
-  createdAt : {
-    type : String
+  category: {
+    type: String,
+    required: true,
+    enum: [
+      "Interview Experience",
+      "Job Posting",
+      "General",
+      "Project Showcase",
+      "Academic Query",
+    ],
+    default: "General",
   },
-  postDetails : {
-    docGivenName :{
-        type: String
+  media: {
+    type: String, // URL to media file (image/video)
+    default: null,
+  },
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
-    url : {
-       type : String
+  ],
+  comments: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      content: {
+        type: String,
+        required: true,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
     },
-    title : {
-        type: String
-    },
-    description : {
-       type : String
-    }
-  }
-})
+  ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-module.exports = mongoose.model("Post", postSchema);
+// Update the updatedAt field before saving
+postSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+const Post = mongoose.model("Post", postSchema);
+
+module.exports = Post;
