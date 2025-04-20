@@ -10,6 +10,8 @@ import styles from "./page.module.css"
 import sortStudentInRoll from "./sortStudentsInNames";
 import PageNotFound from "@/components/common/PageNotFound"
 import loadingAndAlertContext from '@/context/loadingAndAlert/loadingAndAlertContext';
+import { TextField, MenuItem, Select, FormControl, InputLabel, Box } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Page = ({ params }) => {
   const router = useRouter();
@@ -29,6 +31,9 @@ const Page = ({ params }) => {
   const [students, setStudents] = useState(null);
   const [batchRoute, setBatchRoute] = useState(params.batchNum);
   const [batchId, setBatchId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("name");
+  const [filteredStudents, setFilteredStudents] = useState(null);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -85,6 +90,32 @@ const Page = ({ params }) => {
     getBatchStudents();
   }, [isPageExist]);
 
+  // Filter students based on search term and filter type
+  useEffect(() => {
+    if (!students) return;
+    
+    const filtered = students.filter(student => {
+      const searchLower = searchTerm.toLowerCase();
+      
+      switch (filterType) {
+        case "name":
+          return student.userDetails.name.toLowerCase().includes(searchLower);
+        case "company":
+          return student.jobDetails.company.toLowerCase().includes(searchLower);
+        case "role":
+          return student.jobDetails.role.toLowerCase().includes(searchLower);
+        case "field":
+          return student.fieldOfInterest.toLowerCase().includes(searchLower);
+        case "state":
+          return student.userDetails.homeState.toLowerCase().includes(searchLower);
+        default:
+          return true;
+      }
+    });
+    
+    setFilteredStudents(filtered);
+  }, [searchTerm, filterType, students]);
+
   return (
     <>
       {loginStatus ? (
@@ -95,12 +126,52 @@ const Page = ({ params }) => {
             <div className={styles.students_container_box} >
               {/* --- BATCH STUDENTS CONTAINER ---- */}
               <h1 className={styles.batch_student_heading} >{`${batchRoute} batch students`}</h1>
+              
+              {/* Search and Filter Section */}
+              <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center">
+                <FormControl className="min-w-[200px]">
+                  <InputLabel>Filter By</InputLabel>
+                  <Select
+                    value={filterType}
+                    label="Filter By"
+                    onChange={(e) => setFilterType(e.target.value)}
+                    size="small"
+                  >
+                    <MenuItem value="name">Name</MenuItem>
+                    <MenuItem value="company">Company</MenuItem>
+                    <MenuItem value="role">Role</MenuItem>
+                    <MenuItem value="field">Field of Interest</MenuItem>
+                    <MenuItem value="state">State</MenuItem>
+                  </Select>
+                </FormControl>
+                
+                <Box className="flex-grow relative">
+                  <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <TextField
+                    placeholder={`Search by ${filterType}...`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    fullWidth
+                    size="small"
+                    InputProps={{
+                      sx: { paddingLeft: '40px' }
+                    }}
+                  />
+                </Box>
+                
+                {searchTerm && (
+                  <div className="text-sm text-gray-500 whitespace-nowrap">
+                    Found: {filteredStudents?.length || 0} students
+                  </div>
+                )}
+              </div>
+
               {students != null && students.length === 0 && <h1 className="text-lg" >No students registered yet</h1>}
               <div className={styles.only_students_box} >
                 {students != null ?
-                  students.map((student, index) => {
+                  (filteredStudents || students).map((student, index) => {
                     return (
-                      <StudentCard  student={student} cardType="student" key={index} />
+                      <StudentCard student={student} cardType="student" key={index} />
                     )
                   })
                   :

@@ -28,14 +28,34 @@ const verifyFormData = (details) => {
     };
   }
 
-  // -- IF everything is correct ----
-  else {
-    return {
-      error: false,
-      message: "Everything correct",
-    };
+  // Check job details for previous batch students
+  const isLatestBatch =
+    details.batch === "No batch selected" ||
+    details.batch === "latest" ||
+    details.batch === "current";
+
+  if (!isLatestBatch) {
+    if (details.company === "") {
+      return {
+        error: true,
+        message: "Enter your company name",
+      };
+    }
+    if (details.role === "") {
+      return {
+        error: true,
+        message: "Enter your role in company",
+      };
+    }
   }
+
+  // -- IF everything is correct ----
+  return {
+    error: false,
+    message: "Everything correct",
+  };
 };
+
 export default verifyFormData;
 
 // const verifyFormData = (details) => {

@@ -154,7 +154,8 @@ router.get("/:batchId/fetchStudents", authorizeUser, async (req, res) => {
             mobile: 0,
             password: 0,
           },
-        });
+        })
+        .populate("batchId");
       res.json({
         success: true,
         message: `${isBatchExists.batchNum} batch students sent!`,

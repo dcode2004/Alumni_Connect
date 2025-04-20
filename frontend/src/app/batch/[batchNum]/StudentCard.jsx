@@ -30,7 +30,7 @@ const StudentCard = (props) => {
   const disableLink = (e) => {
     e.preventDefault();
   };
-  const {email, status, fieldOfInterest, _id} = props.student != undefined && props.student;
+  const {email, status, fieldOfInterest, _id, jobDetails, batchId} = props.student != undefined && props.student;
   const {name, homeState} = props.student != undefined && props.student.userDetails;
   const {linkedInLink, githubLink} = props.student != undefined && props.student.userDetails.socialLinks;
 
@@ -124,9 +124,9 @@ const StudentCard = (props) => {
             {name}
           </Typography>
           <Typography className="text-xs" >
-          From : {homeState}
+            From : {homeState}
           </Typography>
-          <div className="h-16 mt-2" >
+          <div className="min-h-[64px] mt-2 overflow-y-auto" >
             {fieldOfInterest === "nothing selected" ? 
               <></>
             :
@@ -135,6 +135,13 @@ const StudentCard = (props) => {
                 <span className="block text-sm text-center" >{fieldOfInterest}</span>
               </p>
             }
+            {!batchId?.isLatest && jobDetails && (
+              <p className="flex flex-col mb-2" >
+                <span className="block text-xs text-sky-400 text-center" >Current Position</span>
+                <span className="block text-sm text-center font-medium" >{jobDetails.role}</span>
+                <span className="block text-sm text-center" >{jobDetails.company}</span>
+              </p>
+            )}
           </div>
           <div className={styles.social_links_box}>
             <Link

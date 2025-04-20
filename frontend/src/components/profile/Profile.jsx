@@ -6,7 +6,9 @@ import {
   Avatar,
   Button,
   TextField,
-  Typography
+  Typography,
+  Box,
+  Modal
 } from "@mui/material";
 import UserTypeForm from "../../app/registration/registrationform/UserTypeForm";
 import activeUserAndLoginContext from "@/context/activeUserAndLoginStatus/activeUserAndLoginStatusContext";
@@ -20,6 +22,19 @@ import FollowersListModal from '../modal/FollowersListModal';
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Link from "next/link";
+import EditJobDetails from "./EditJobDetails";
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2
+};
 
 const Profile = () => {
   const { activeUser, loginStatus, logOutUser, fetchActiveUser, setLoginStatus } = useContext(activeUserAndLoginContext);
@@ -55,6 +70,8 @@ const Profile = () => {
   // New state for follow functionality
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
+
+  const [showJobDetailsModal, setShowJobDetailsModal] = useState(false);
 
   return (
     <>
@@ -143,6 +160,38 @@ const Profile = () => {
                     </Button>
                   </div>
                   <EditOption className="flex justify-center mt-5" onClick={() => { showModal("profilePicture") }} editText={"Edit Profile picture"} />
+
+                  {/* Job Details - Only show for previous batch students */}
+                  {activeUser && !activeUser.isAdmin && activeUser.batchId && !activeUser.batchId.isLatest && (
+                    <div className="mt-4">
+                      <Typography variant="h6" gutterBottom sx={{ color: "#3584FC", textAlign: "center" }}>
+                        Job Details
+                      </Typography>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                        <Typography>
+                          Company: {activeUser?.jobDetails?.company || "Not specified"}
+                        </Typography>
+                        <Typography>
+                          Role: {activeUser?.jobDetails?.role || "Not specified"}
+                        </Typography>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          onClick={() => setShowJobDetailsModal(true)}
+                          sx={{
+                            borderColor: '#3584FC',
+                            color: '#3584FC',
+                            '&:hover': {
+                              borderColor: '#3584FC',
+                              backgroundColor: 'rgba(53, 132, 252, 0.04)'
+                            }
+                          }}
+                        >
+                          Edit Job Details
+                        </Button>
+                      </Box>
+                    </div>
+                  )}
                 </div>
 
 
@@ -356,6 +405,15 @@ const Profile = () => {
           <Loading />
         )}
       </section>
+
+      <Modal
+        open={showJobDetailsModal}
+        onClose={() => setShowJobDetailsModal(false)}
+      >
+        <Box sx={modalStyle}>
+          <EditJobDetails closeModal={() => setShowJobDetailsModal(false)} />
+        </Box>
+      </Modal>
     </>
   );
 };

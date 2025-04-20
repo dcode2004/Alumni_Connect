@@ -35,8 +35,8 @@ const Batch = () => {
     })
     const response = await fetchBatches.json();
     if (response.success) {
-      const sortedBatches = sortArrayObject(response.batches)
-      setAllBatches(sortedBatches.reverse());
+      const sortedBatches = sortArrayObject(response.batches);
+      setAllBatches(sortedBatches);
     }
   }
   useEffect(() => {
@@ -58,35 +58,28 @@ const Batch = () => {
           {/* --- MAIN BATCH CONTAINER STARTS ------- */}
           {alert.alert && <Alert />}
           <div className={styles.batch_main_container}>
-            {/* -------- TOP SECTION STARTS :: LATEST TWO BATCHES ------------ */}
+            {/* -------- TOP SECTION STARTS :: LATEST BATCHES ------------ */}
             <div className={styles.top_container_latest_two_batches}>
               <h1 className="text-2xl text-black font-bold mb-5" >Latest batches</h1>
               <div className={styles.latest_batches_and_create_batch_container}>
-
-                {/* two batches latest at top */}
-                {allBatches != null ? allBatches.map((batch, index) => {
-                  if (index < 2) {
-                    return <ActionAreaCard cardType="batch" key={index} batch={batch} />;
-                  }
-                  return null; // Don't render components beyond the limit
-                }) :
+                {/* latest batches */}
+                {allBatches != null ? allBatches
+                  .filter(batch => batch.isLatest)
+                  .map((batch, index) => (
+                    <ActionAreaCard cardType="batch" key={index} batch={batch} />
+                  )) : (
                   <>
                     <BatchSkeleton />
                     <BatchSkeleton />
                   </>
-                }
+                )}
 
                 {/* create new batch */}
-                {
-                  activeUser != null
-                  &&
-                  (
-                    activeUser.isSpecialUser === "admin" &&
-                    <div>
-                      <ActionAreaCard cardType="create_new_batch" fetchAllBatch={fetchAllBatch} />
-                    </div>
-                  )
-                }
+                {activeUser != null && activeUser.isSpecialUser === "admin" && (
+                  <div>
+                    <ActionAreaCard cardType="create_new_batch" fetchAllBatch={fetchAllBatch} />
+                  </div>
+                )}
               </div>
             </div>
             {/* -------- TOP SECTION ENDS ------------ */}
@@ -94,14 +87,12 @@ const Batch = () => {
             {/* ---------BOTTOM SECTION STARTS :: PREVIOUS BATCHES ------- */}
             <div className={`${styles.bottom_container_previous_batches} mt-5`}>
               <h1 className="text-2xl text-black font-bold mb-3" >Previous Batches</h1>
-              <div className={styles.all_previous_batches} >
-                {allBatches != null ? allBatches.map((batch, index) => {
-                  if (index > 1) {
-                    return <ActionAreaCard cardType="batch" key={index} batch={batch} />;
-                  }
-                  return null; // Don't render components beyond the limit
-                })
-                  :
+              <div className={styles.all_previous_batches}>
+                {allBatches != null ? allBatches
+                  .filter(batch => !batch.isLatest)
+                  .map((batch, index) => (
+                    <ActionAreaCard cardType="batch" key={index} batch={batch} />
+                  )) : (
                   <>
                     {Array.from({ length: 9 }, (_, index) => (
                       <div key={index}>
@@ -109,7 +100,7 @@ const Batch = () => {
                       </div>
                     ))}
                   </>
-                }
+                )}
               </div>
             </div>
             {/* ---------BOTTOM SECTION ENDS :: PREVIOUS BATCHES ------- */}

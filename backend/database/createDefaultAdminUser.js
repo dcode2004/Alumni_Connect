@@ -32,11 +32,16 @@ const createDefaultAdmin = async () => {
         );
         const newAdminUser = new User({
           email: defaultAdminEmail,
+          userType: "admin",
           isSpecialUser: "admin", // admin
           status: 1, // verified
           userDetails: {
             name: "Admin LNMIIT",
             password: hashedPassword,
+          },
+          jobDetails: {
+            company: "LNMIIT",
+            role: "admin",
           },
         });
         await newAdminUser.save();

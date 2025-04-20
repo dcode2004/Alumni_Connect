@@ -9,6 +9,7 @@ const userSchema = new Schema({
   },
   batchId: {
     type: Schema.ObjectId,
+    ref: "Batch",
   },
   registrationDate: {
     type: Date,
@@ -72,6 +73,16 @@ const userSchema = new Schema({
       },
     },
     otherThings: {},
+  },
+  jobDetails: {
+    company: {
+      type: String,
+      default: "LNMIIT",
+    },
+    role: {
+      type: String,
+      default: "Student",
+    },
   },
   fieldOfInterest: {
     type: String,

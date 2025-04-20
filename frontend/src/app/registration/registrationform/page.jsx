@@ -65,6 +65,8 @@ const RegistrationForm = () => {
     password: "",
     fullName: "",
     homeState: "No state selected",
+    company: "",
+    role: ""
   });
 
   //user will automatically redirect if not done previous two step
@@ -92,34 +94,79 @@ const RegistrationForm = () => {
 
   // handle submit
   const handleSubmit = (formData) => {
-    const { error, message } = validateFormData(formData);
-    if (error) {
-      // credential error
+    // First validate basic required fields
+    if (formData.batch === "No batch selected") {
       setAlert({
         alert: true,
         alertType: "warning",
-        alertMessage: message,
+        alertMessage: "Enter your batch",
       });
-    } else {
-      // is check box checked
-      if (isChecked) {
-        setLoading(true);
-        //registerNewUser(formData)
-        const resetDetails = registerNewUser(formData);
+      return;
+    }
+    if (formData.fullName === "") {
+      setAlert({
+        alert: true,
+        alertType: "warning",
+        alertMessage: "Enter your full name",
+      });
+      return;
+    }
+    if (formData.password.length < 5) {
+      setAlert({
+        alert: true,
+        alertType: "warning",
+        alertMessage: "Enter a valid password",
+      });
+      return;
+    }
+    if (formData.homeState === "No state selected") {
+      setAlert({
+        alert: true,
+        alertType: "warning",
+        alertMessage: "Enter home state",
+      });
+      return;
+    }
 
-        if (resetDetails.resetDetails) {
-          // set all to default values
-          setIsChecked(false);
-          setDetails(details);
-        }
-      } else {
-        // Force user to agree to share personnel information
-        setAlert({
-          alert: true,
-          alertType: "warning",
-          alertMessage: "Please Agree to share you personal information!",
-        });
-      }
+    // Only validate job details if not latest batch
+    const selectedBatch = batchLists?.find(b => b.batchNum === parseInt(formData.batch));
+    const isLatestBatch = selectedBatch?.isLatest;
+
+    if (!isLatestBatch && formData.company === "") {
+      setAlert({
+        alert: true,
+        alertType: "warning",
+        alertMessage: "Enter your company name",
+      });
+      return;
+    }
+    if (!isLatestBatch && formData.role === "") {
+      setAlert({
+        alert: true,
+        alertType: "warning",
+        alertMessage: "Enter your role in company",
+      });
+      return;
+    }
+
+    // If checkbox not checked
+    if (!isChecked) {
+      setAlert({
+        alert: true,
+        alertType: "warning",
+        alertMessage: "Please Agree to share you personal information!",
+      });
+      return;
+    }
+
+    // All validations passed, proceed with registration
+    setLoading(true);
+    const resetDetails = registerNewUser(formData);
+
+    if (resetDetails.resetDetails) {
+      // set all to default values
+      setIsChecked(false);
+      setDetails(details);
     }
   };
 
@@ -242,7 +289,6 @@ const RegistrationForm = () => {
                     fullWidth
                     select
                     label="Home state"
-                    // defaultValue="no state"
                     variant="filled"
                     helperText="To know classmates from same town"
                   >
@@ -265,6 +311,36 @@ const RegistrationForm = () => {
                       Outer state
                     </MenuItem>
                   </TextField>
+
+                  {/* --- Company --- */}
+                  <TextField
+                    className={styles.input_field}
+                    style={{ margin: "0.5rem" }}
+                    name="company"
+                    value={details.company}
+                    onChange={handleChange}
+                    fullWidth
+                    label="Company"
+                    variant="filled"
+                    placeholder="Your company name"
+                    disabled={details.batch === "No batch selected" || batchLists?.find(b => b.batchNum === details.batch)?.isLatest}
+                    required={!batchLists?.find(b => b.batchNum === details.batch)?.isLatest}
+                  />
+
+                  {/* --- Role --- */}
+                  <TextField
+                    className={styles.input_field}
+                    style={{ margin: "0.5rem" }}
+                    name="role"
+                    value={details.role}
+                    onChange={handleChange}
+                    fullWidth
+                    label="Role"
+                    variant="filled"
+                    placeholder="Your role in company"
+                    disabled={details.batch === "No batch selected" || batchLists?.find(b => b.batchNum === details.batch)?.isLatest}
+                    required={!batchLists?.find(b => b.batchNum === details.batch)?.isLatest}
+                  />
                 </div>
               </div>
 

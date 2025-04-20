@@ -43,13 +43,8 @@ router.post("/createUser", upload.single("imageFile"), async (req, res) => {
     const textData = JSON.parse(req.body.textData);
     // credentials
     // need to validate credentials
-    const {
-      email,
-      password,
-      batch,
-      fullName,
-      homeState,
-    } = textData; // getting data from frontend
+    const { email, password, batch, fullName, homeState, jobDetails } =
+      textData; // getting data from frontend
     // Step 1 : check if user email already exists
     const isExists = await User.findOne({ email });
     if (isExists) {
@@ -68,12 +63,16 @@ router.post("/createUser", upload.single("imageFile"), async (req, res) => {
         const newUser = new User({
           email,
           batchId: isBatchExists._id,
+          batchNum: isBatchExists.batchNum,
           userDetails: {
-            name: fullName ,
+            name: fullName,
             homeState,
             password: hashedPassword,
           },
-          batchNum: isBatchExists.batchNum,
+          jobDetails: jobDetails || {
+            company: "LNMIIT",
+            role: "Student",
+          },
         });
         // --- Create JWT token ---
         const data = { userId: newUser._id };
@@ -98,16 +97,16 @@ router.post("/createUser", upload.single("imageFile"), async (req, res) => {
           };
           // ---- if user has sent profile image , first save to firebase
           if (fileType === "image/jpeg" || fileType === "image/png") {
-              const uploadProfilePicRef = ref(
-                profileImagesRef,
-                `${batch}/${docGivenName}`
-              );
-              const snapShot = await uploadBytes(
-                uploadProfilePicRef,
-                bufferData,
-                metaData
-              );
-              userProfileUrl = await getDownloadURL(snapShot.ref);
+            const uploadProfilePicRef = ref(
+              profileImagesRef,
+              `${batch}/${docGivenName}`
+            );
+            const snapShot = await uploadBytes(
+              uploadProfilePicRef,
+              bufferData,
+              metaData
+            );
+            userProfileUrl = await getDownloadURL(snapShot.ref);
           }
           if (userProfileUrl === "" || userProfileUrl === "error") {
             finalMessage = "Account created but profile picture upload failed!";
@@ -120,7 +119,7 @@ router.post("/createUser", upload.single("imageFile"), async (req, res) => {
           }
         }
         await newUser.save();
-        const userFullName = newUser.userDetails.name ;
+        const userFullName = newUser.userDetails.name;
         isBatchExists.totalRegistered += 1; // isBatchExists.totalRegistered = isBatchExists.totalRegistered + 1
         await isBatchExists.save();
         // ----------- Send Email to new user ------
@@ -169,9 +168,9 @@ router.post("/loginViaGoogle", async (req, res) => {
       // --- Create JWT token ---
       const data = { userId: isExist._id };
       const token = jwt.sign(data, process.env.JWT_SECRET_CODE);
-      const user = await User.findById(isExist._id).select(
-        "-userDetails.password"
-      );
+      const user = await User.findById(isExist._id)
+        .select("-userDetails.password")
+        .populate("batchId");
       return res.json({
         success: true,
         message: "Signed in successfully",
@@ -206,9 +205,9 @@ router.post("/loginManually", async (req, res) => {
       if (isPassMatched) {
         const data = { userId: isExist._id };
         const token = jwt.sign(data, process.env.JWT_SECRET_CODE);
-        const user = await User.findById(isExist._id).select(
-          "-userDetails.password"
-        );
+        const user = await User.findById(isExist._id)
+          .select("-userDetails.password")
+          .populate("batchId");
         res.json({
           success: true,
           message: "Signed in successfully",
@@ -239,11 +238,10 @@ router.post("/loginManually", async (req, res) => {
 //ROUTE 4 :: fetch user
 router.get("/fetchUser", authorizeUser, async (req, res) => {
   try {
-    //console.log(req.userId);
     const userId = req.userId;
-    const findUser = await User.findById(userId).select(
-      "-userDetails.password"
-    );
+    const findUser = await User.findById(userId)
+      .select("-userDetails.password")
+      .populate("batchId"); // Populate the batchId field
     res.json({
       success: true,
       message: "user data sent",
