@@ -1,42 +1,63 @@
-"use client"
-import React from 'react'
-import Carousel from "nuka-carousel"
-import Image from 'next/image'
-import styles from "./hero.module.css"
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-const CarouselComponent = ({className}) => {
+"use client";
+import React from "react";
+import Carousel from "nuka-carousel";
+import Image from "next/image";
+import styles from "./hero.module.css";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
+const CarouselComponent = ({ className }) => {
   const defaultControlsConfig = {
-    nextButtonText: React.ReactNode = <NavigateNextIcon />,
-    prevButtonText: React.ReactNode = <ArrowBackIosNewIcon />,
+    nextButtonText: <NavigateNextIcon />,
+    prevButtonText: <ArrowBackIosNewIcon />,
     pagingDotsStyle: {
-      margin: "0 2.5px 0 2.5px",
+      margin: "0 5px",
+      fill: "#3584FC",
     },
     pagingDotsContainerClassName: `${styles.paging_dot_container}`,
-  }
+  };
 
   return (
-    <div className={`${className}`} >
+    <div className={`${className} ${styles.carousel_container}`}>
       <Carousel
         autoplay
         wrapAround
         defaultControlsConfig={defaultControlsConfig}
+        autoplayInterval={3000}
+        pauseOnHover
+        speed={700}
       >
-        <Image className={styles.hero_section_image} src={"/images/img1.jpg"} width={580} height={300} alt='panorama1' />
-
-        <Image className={styles.hero_section_image} src={"/images/img2.jpg"} width={580} height={300} alt='panorama1' />
-
-        <Image className={styles.hero_section_image} src={"/images/img3.jpg"} width={580} height={300} alt='panorama2' />
-
-        <Image className={styles.hero_section_image} src={"/images/img4.jpg"} width={580} height={300} alt='panorama3' />
-
-        {/* <Image className={styles.hero_section_image} src={"https://firebasestorage.googleapis.com/v0/b/community-common-images.appspot.com/o/images%2Fcommon-images%2Fhome-page%2Fmemory%2F41_saraswati_puja.jpeg?alt=media&token=e9b4d004-b595-4c9a-a13f-72c3a85355cd"} width={580} height={300} alt='panorama1' />
-
-        <Image className={styles.hero_section_image} src={"https://firebasestorage.googleapis.com/v0/b/community-common-images.appspot.com/o/images%2Fcommon-images%2Fhome-page%2Fmemory%2Fmca_puja.jpeg?alt=media&token=7e5da75c-7d58-49b4-8436-c47a870b918a"} width={580} height={300} alt='panorama2' /> */}
+        <Image
+          className={`${styles.hero_section_image} hover:scale-105 transition-transform duration-300`}
+          src="/images/college_event1.jpg"
+          width={580}
+          height={300}
+          alt="College Event 1"
+        />
+        <Image
+          className={`${styles.hero_section_image} hover:scale-105 transition-transform duration-300`}
+          src="/images/college_event2.jpg"
+          width={580}
+          height={300}
+          alt="College Event 2"
+        />
+        <Image
+          className={`${styles.hero_section_image} hover:scale-105 transition-transform duration-300`}
+          src="/images/college_event3.jpg"
+          width={580}
+          height={300}
+          alt="College Event 3"
+        />
+        <Image
+          className={`${styles.hero_section_image} hover:scale-105 transition-transform duration-300`}
+          src="/images/college_event4.jpg"
+          width={580}
+          height={300}
+          alt="College Event 4"
+        />
       </Carousel>
     </div>
-  )
-}
+  );
+};
 
-export default CarouselComponent
+export default CarouselComponent;

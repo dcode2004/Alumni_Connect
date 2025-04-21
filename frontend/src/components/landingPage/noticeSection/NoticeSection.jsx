@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import styles from "./css/NoticeSection.module.css";
 import NoticeCard from "./NoticeCard";
@@ -19,7 +19,6 @@ const titleVariants = {
   },
 };
 
-
 const NoticeSection = () => {
   return (
     <>
@@ -33,8 +32,7 @@ const NoticeSection = () => {
       >
         <div className={styles.notice_section}>
           <h1 className={styles.notice_heading}>Notices</h1>
-          <div className="flex flex-wrap justify-between">
-            {/* <NoticeCard noticeLink={""} notice_name={"Course Fee"} /> */}
+          <div className="flex flex-wrap justify-between gap-4">
             <NoticeCard
               noticeLink={
                 "https://lnmiit.ac.in/academics/academic-documents/#pdf-academic-calendar-2025/"
@@ -48,15 +46,11 @@ const NoticeSection = () => {
               notice_name={"Holiday Calendar"}
             />
             <NoticeCard
-              noticeLink={
-                "https://placements.lnmiit.ac.in/statistics/"
-              }
+              noticeLink={"https://placements.lnmiit.ac.in/statistics/"}
               notice_name={"Placement Stats"}
             />
             <NoticeCard
-              noticeLink={
-                "https://lnmiit.ac.in/academics/"
-              }
+              noticeLink={"https://lnmiit.ac.in/academics/"}
               notice_name={"Academics"}
             />
           </div>
