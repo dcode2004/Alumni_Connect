@@ -5,9 +5,11 @@ const cors = require("cors");
 const app = express();
 const connectToDatabase = require("./database/database");
 const userRoutes = require("./routes/userRoutes");
+const userProfileEdit = require("./routes/userProfileEdit");
+const postRoutes = require("./routes/postRoutes");
+const galleryRoutes = require("./routes/galleryRoute");
 const batchRoutes = require("./routes/batchRoutes");
 const followRoutes = require("./routes/followRoutes");
-const postRoutes = require("./routes/postRoutes");
 
 // -------- DATA BASE CONNECTION -----------
 // use async/await to wait for the connection
@@ -35,12 +37,13 @@ const homeResponseData = {
 
 // -------- ALL ROUTES ----------------
 app.use("/api/user", userRoutes);
+app.use("/api/user/editProfile", userProfileEdit);
+app.use("/api/posts", postRoutes);
+app.use("/api/gallery", galleryRoutes);
 app.use("/api/batch", batchRoutes);
 app.use("/api/follow", followRoutes);
-app.use("/api/posts", postRoutes);
 app.use("/api/coordinators/", require("./routes/coordinators"));
 app.use("/api/accounts", require("./routes/adminRoutes")); // fetches all users account for admin page
-app.use("/api/user/editProfile", require("./routes/userProfileEdit")); // to edit users profile
 
 // ---- HOME ROUTE -----
 app.get("/", (req, res) => {

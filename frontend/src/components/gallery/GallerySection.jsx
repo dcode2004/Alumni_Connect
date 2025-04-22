@@ -61,7 +61,7 @@ export default function Gallery() {
     try {
       // ----- local storage -----
       const token = localStorage.getItem("token");
-      const url = `${baseApi}/api/post/fetchPosts?postType=gallery`;
+      const url = `${baseApi}/api/gallery/fetch`;
       const fetchPosts = await fetch(url, {
         method: "GET",
         headers: {
@@ -86,7 +86,7 @@ export default function Gallery() {
   }, []);
 
   return (
-    <div className="p-1 pb-5">
+    <div className="p-4 pb-5">
       {imagePreview.preview && (
         <PostLargerView
           currentImageIndex={imagePreview.imageIndex}
@@ -95,54 +95,66 @@ export default function Gallery() {
           setImages={setImages}
         />
       )}
-      <h1 className="mt-3 text-3xl font-bold">Community Gallery</h1>
-      {(isSpecialUser === "admin" || isSpecialUser === "batchAdmin") && <CreateAGalleryPost className="fixed" setImages={setImages} />}
-      <ImageList cols={detectColumns()}>
-        {images === null
-          ? Array.from({ length: 12 }, (_, index) => (
-              <div key={index}>
-                <BatchSkeleton />
-              </div>
-            ))
-          : images.map((image, index) => {
-              const { authorId, postId, createdAt } = image;
-              const { title, url, description } = image.postDetails;
-              return (
-                <ImageListItem
-                  className={`!h-48 md:!h-64 cursor-pointer`}
-                  key={index}
-                  onClick={() => {
-                    handleImagePreview(index);
-                  }}
-                >
-                  <img
-                    srcSet={`${url}?w=248&fit=crop&auto=format&dpr=2 2x`} //
-                    src={`${url}`} //?w=248&fit=crop&auto=format
-                    alt={title}
-                    loading="lazy"
-                    className="inline-block !h-full"
-                  />
-                  <ImageListItemBar
-                    title={<p className="text-sm" >{title}</p>}
-                    // subtitle={<p>Uploaded at : {moment(createdAt).format('MMMM Do YYYY, h:mm:ss a')}</p>}
-                    subtitle={<p><CloudIcon className="text-sm" />  {moment(createdAt).format('llll')}</p>}
-                    actionIcon={
-                      <IconButton
-                        sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                        aria-label={`info about ${title}`}
-                        onClick={() => {
-                          handleImagePreview(index);
-                        }}
-                      >
-                        <InfoIcon />
-                      </IconButton>
-                    }
-                  />
-                </ImageListItem>
-              );
-            })}
-        {images != null && images.length === 0 && (
-          <p>No images has been added gallery</p>
+      
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold mb-2">Community Gallery</h1>
+        <p className="text-gray-600">Share and explore memorable moments from our community</p>
+      </div>
+
+      {(isSpecialUser === "admin" || isSpecialUser === "batchAdmin") && (
+        <div className="mb-4">
+          <CreateAGalleryPost setImages={setImages} />
+        </div>
+      )}
+
+      <ImageList cols={detectColumns()} gap={16}>
+        {images === null ? (
+          Array.from({ length: 12 }, (_, index) => (
+            <div key={index} className="w-full">
+              <BatchSkeleton />
+            </div>
+          ))
+        ) : images.length === 0 ? (
+          <div className="col-span-full text-center py-8 text-gray-500">
+            No images have been added to the gallery yet
+          </div>
+        ) : (
+          images.map((image, index) => {
+            const { title, url, description, createdAt } = image;
+            return (
+              <ImageListItem
+                className="!h-48 md:!h-64 cursor-pointer hover:opacity-95 transition-opacity"
+                key={index}
+                onClick={() => handleImagePreview(index)}
+              >
+                <img
+                  srcSet={`${url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  src={`${url}`}
+                  alt={title}
+                  loading="lazy"
+                  className="inline-block !h-full object-cover"
+                />
+                <ImageListItemBar
+                  title={<p className="text-sm font-medium">{title}</p>}
+                  subtitle={
+                    <p className="flex items-center gap-1 text-xs">
+                      <CloudIcon className="!w-4 !h-4" />
+                      {moment(createdAt).format('ll')}
+                    </p>
+                  }
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                      aria-label={`info about ${title}`}
+                      onClick={() => handleImagePreview(index)}
+                    >
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+            );
+          })
         )}
       </ImageList>
     </div>

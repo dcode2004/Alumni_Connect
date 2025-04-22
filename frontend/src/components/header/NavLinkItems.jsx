@@ -29,11 +29,10 @@ const NavLinkItems = ({toggleNav, navItemType}) => {
         <li onClick={toggleNav}>
           <Link 
           className={`${
-            currentUrlPath.startsWith("/notes") && "text-sky-500"
-          }`}
-          shallow={true} href="/notes">Notes</Link>
+            currentUrlPath.startsWith("/posts") && "text-sky-500"
+          }`} 
+          shallow={true} href="/posts">Posts</Link>
         </li>
-        
         <li onClick={toggleNav}>
           <Link 
           className={`${currentUrlPath === "/gallery" && 'text-sky-500'}`} 
