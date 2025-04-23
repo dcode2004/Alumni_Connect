@@ -1,112 +1,73 @@
-.registration_main_container{
-    width: 100%;
-    /* border: 1px solid red; */
-    padding: 1.5rem;
-    padding-bottom: 2rem;
+.page_section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: white;
+  padding: 2rem;
 }
-.register_top_container{
+
+.registration_main_container {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+}
+
+.register_top_container {
   margin-bottom: 1.5rem;
-  margin-top: 0.5rem;
+  text-align: center;
 }
-.form_input_container{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    /* border: 1px solid green; */
+
+.register_top_container h5 {
+  font-size: 1.5rem;
+  color: #3584fc;
+  font-weight: bold;
 }
-.userType_form_heading{
-    color : "#3584FC";
+
+.form_input_container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
-.userType_form_sub_heading{
-    color : "#8eb8f8";
+
+.input_field {
+  margin: 0;
+  width: 100%;
 }
-.input_box{
-    width: 30%;
-    /* border: 1px solid red; */
+
+.submit_button {
+  margin-top: 1.5rem;
+  background-color: #4caf50;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
-.input_field{
-    margin: 0.5rem;
-    color: bisque;
+
+.submit_button:hover {
+  background: #388e3c;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
-.social_link_heading{
-    color: #3584FC;
-    margin: 0.5rem;
-    font: 1.5rem;
+
+.checkbox_container {
+  margin-top: 1rem;
+  text-align: center;
 }
-.upload_profile_pic_heading{
-    color: #3584FC;
-    font-size: 1.5rem;
-    text-align: center;
-    margin-bottom: 0.3rem;
+
+.checkbox_container p {
+  font-size: 0.9rem;
+  color: #555;
 }
-.upload_profile_pic_note{
-    text-align: center;
-    color: grey;
-    margin-bottom: 0.5rem;
-}
-.upload_profile_pic_box{
-    /* border: 1px solid red; */
-    padding-top: 2rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.remove_profile_pic{
-    position: absolute;
-    cursor: pointer;
-    top: 0.5rem;
-    left: 35%;
-    display: flex;
-    align-items: center;
-}
-.remove_profile_pic_remove_text{
-   margin-left: 0.1rem;
-}
-.chose_file_btn{
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-}
-.supported_files{
-    margin-top: 1rem;
-}
-.note_for_pic{
-    margin-top: 1rem;
-    font-size: 0.8rem;
-    color: grey;
-    text-align: center;
-    border: 1px solid red;
-    padding: 0.5rem;
-}
-.submit_button{
-    margin-top: 1rem;
-}
-/* ------------ RESPONSIVE STYLES ---------- */
-@media only screen and (max-width: 1000px) {
-    .form_input_container{
-        justify-content:flex-start;
-    }
-    .input_box{
-        width: 45%;
-        margin-bottom: 1.5rem;
-        margin-right: 2rem;
-    }
-}
-@media only screen and (max-width: 690px) {
-    .registration_main_container{
-        padding: 0.5rem;
-        padding-bottom: 2rem;
-    }
-    .form_input_container{
-        justify-content:space-evenly;
-    }
-    .input_box{
-        width: 40%;
-        margin-right: 0.5rem;
-    }
-}
-@media only screen and (max-width: 550px) {
-    .input_box{
-        width: 95%;
-    }
+
+@media only screen and (max-width: 600px) {
+  .registration_main_container {
+    padding: 1rem;
+  }
 }
