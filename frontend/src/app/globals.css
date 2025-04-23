@@ -21,6 +21,10 @@
   text-decoration: none;
   /* color:#8eb8f8; */
 }
+html, body {
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  max-width: 100%; /* Ensure no element exceeds the viewport width */
+}
 section.page_section{
   width: 100%;
   min-height: 100vh;

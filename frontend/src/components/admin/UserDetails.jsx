@@ -162,11 +162,6 @@ const UserDetails = (props) => {
             
             <div className='w-[33%] flex flex-col items-center p-3' >
                <Avatar className='mb-3' sx={{ width: "150px", height: "150px" }} src={url} alt={name} />
-               { (isSpecialUser === "admin" || isSpecialUser === "superAdmin") &&
-                  <>
-                    <button onClick={() => { showModal("profilePicture") }} className='bg-sky-700 text-white p-1 rounded' >Edit user profile</button>
-                  </>
-               }
                {url !== "" &&
                   <Link
                   className='mt-3 underline'
@@ -193,11 +188,6 @@ const UserDetails = (props) => {
                  <span className="absolute block bg-black text-xs w-46 -top-[90%] -left-0">
                     Batch admin can verify their classmates only!</span>
               </button>
-            }
-            {(isSpecialUser === "admin" || isSpecialUser === "superAdmin") &&
-               <>
-                  <button onClick={()=>{handleDeleteUser(_id)}} className='bg-red-500 outline-none outline-0 text-white p-2 mr-5' >Delete User</button>
-               </>
             }
          </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 import React, { useContext, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import styles from "./page.module.css";
 import { Button, TextField } from "@mui/material";
 import Image from "next/image";
@@ -10,6 +11,8 @@ import RegistrationContext from "@/context/registration/registrationContext";
 import validate from "./validate";
 
 const Login = () => {
+  const router = useRouter(); // Initialize useRouter
+
   // ----- CONTEXT APIS -------
   const { setLoading, createAlert, loading } = useContext(loadingAndAlertContext);
   const { googleSignIn, signInManually } = useContext(RegistrationContext);
@@ -38,6 +41,7 @@ const Login = () => {
       if (isSigned.resetDetails) {
         setLoginDetails({ email: "", password: "" });
         createAlert("success", "Login successful!");
+        router.push("/"); // Redirect to the home page
       } else {
         createAlert("error", "Invalid credentials!");
       }
@@ -50,6 +54,7 @@ const Login = () => {
     setLoading(false);
     if (isSignedIn) {
       createAlert("success", "Google login successful!");
+      router.push("/"); // Redirect to the home page
     } else {
       createAlert("error", "Google login failed!");
     }
