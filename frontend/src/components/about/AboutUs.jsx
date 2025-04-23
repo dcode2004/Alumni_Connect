@@ -1,52 +1,88 @@
-"use client"
-import React from 'react'
-import ProjectContributor from './ProjectContributor'
-
+"use client";
+import React from "react";
+import ProjectContributor from "./ProjectContributor";
 
 const AboutUs = () => {
-    const frontend_backend_contributor = [
-        "655669bc41a72f015539174d", // Satyanarayan
-        "6561901f7f0670bfa985526a", // Dibyajyoti
-        "656ac9a20469aa5099578de8",  // Soumyaranjan
-    ];
-    const tester = [
-        // "655f583df6ec28a385eafcc8", // Rakesh
-        "655f92db96ddd3aab98d4df6", // Debashish
-        "657089ed80af680e5e00e679", // M Tanuja
-    ];
+  const contributors = [
+    {
+      id: "22ucs112",
+      name: "Lakshya Jangid",
+      image: "/images/22ucs112.jpg",
+      linkedIn: "https://www.linkedin.com/in/lakshya-jangid/",
+      github: "https://github.com/lakshyajangid28",
+    },
+    {
+      id: "22ucs127",
+      name: "Mridul Sharma",
+      image: "/images/22ucs127.jpg",
+      linkedIn: "https://www.linkedin.com/in/mridul-sharma/",
+      github: "https://github.com/mridul-sharma",
+    },
+    {
+      id: "22ucs062",
+      name: "Devansh Vyas",
+      image: "/images/22ucs062.jpg",
+      linkedIn: "https://www.linkedin.com/in/devansh-vyas/",
+      github: "https://github.com/devansh-vyas",
+    },
+  ];
 
-    return (
-        <div className='p-3 pl-5' >
-            {/* ---- About Us --- */}
-            <div className='mb-5' >
-                <h1 className='text-sky-500 text-3xl underline font-bold mb-5 mt-3 after:min-w-fit after:bg-red-500' >About us</h1>
-                <p className='' >
-                    We are the students of of <a className='text-sky-600 underline underline-offset-4' href={"https://lnmiit.ac.in/"} target='_blank' > LNMIIT, Jaipur</a> having potential to build & conquer tomorrows problem. Thanks to our Faculty SuperVisor <span className='text-sky-500' >Dr. Kanjalochan Jena</span> for giving us the opportunity to showcase our talent. 
-                </p>
-                <h1 className='underline text-sky-500 text-lg font-semibold mb-2 mt-3' >Our Main Goal</h1>
-                <ul className='pl-5' >
-                    <li className='list-decimal mt-1 mb-1' >Keeping all LNMIIT students under one hood including our Alumni. So that we can  organize <span className='text-sky-500' >Alumni meet</span> every year. This will allow us to be in touch with them & possibly could learn & grow.
-                    </li>
-                    <li className='list-decimal mt-1 mb-1' >Continuously putting efforts to make ourselves better in the field.</li>
-                    <li className='list-decimal mt-1 mb-1' >Maintaining the reputations of LNMIIT.</li>
-                </ul>
-            </div>
-            
-            <div className='mb-3' >
-                <h1 className='text-sky-500 text-3xl underline font-bold mb-3 mt-3 after:min-w-fit after:bg-red-500' >Our Contributors</h1>
-                {/* <p>Thanks to our students who has been continuously putting their efforts & time to make this website possible.</p> */}
-                <div className='flex flex-wrap' >
+  return (
+    <section className="bg-gray-100 min-h-screen pt-16 px-8">
+      <div className="max-w-full">
+        <h1 className="text-4xl font-bold text-blue-600 mb-6">About Us</h1>
+        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+          Welcome to the LNMIIT Alumni Connect platform! We are a team of
+          passionate students from{" "}
+          <a
+            href="https://lnmiit.ac.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 font-semibold hover:underline"
+          >
+            LNMIIT, Jaipur
+          </a>
+          , dedicated to bridging the gap between alumni and current students.
+          Our mission is to create a collaborative space where alumni and
+          students can connect, share experiences, and grow together.
+        </p>
+        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+          This platform is a testament to our commitment to fostering a strong
+          and supportive community. We extend our heartfelt gratitude to our
+          Faculty Supervisor,{" "}
+          <span className="text-blue-700 font-semibold">
+            Dr. Kanjalochan Jena
+          </span>
+          , for his invaluable guidance and encouragement throughout this
+          journey.
+        </p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Vision</h2>
+        <ul className="list-decimal list-inside text-gray-700 space-y-2 mb-12">
+          <li>
+            Build a unified platform to connect all LNMIIT alumni and students
+            for networking and mentorship opportunities.
+          </li>
+          <li>
+            Empower students to learn from alumni experiences and enhance their
+            professional growth.
+          </li>
+          <li>
+            Strengthen the LNMIIT community by organizing events, alumni meets,
+            and collaborative initiatives.
+          </li>
+        </ul>
+      </div>
 
-                    {/* --- Frontend & backend ---- */}
-                    <ProjectContributor contributeField={"Frontend & Backend"} contributorIds={frontend_backend_contributor} className={"lg:mr-10 mt-5 mb-5 border-l-2 border-sky-400 pl-1 md:pl-5"} />
-
-                    {/* ---- Tester ---- */}
-                    <ProjectContributor contributeField={"Testing"} contributorIds={tester} className={"lg:mr-10 mt-5 mb-5 border-l-2 border-sky-400 pl-1 md:pl-5"} />
-
-                </div>
-            </div>
+      <div className="max-w-6xl">
+        <h1 className="text-3xl font-bold text-blue-600 mb-8">Our Contributors</h1>
+        <div className="flex flex-wrap gap-8">
+          {contributors.map((contributor, index) => (
+            <ProjectContributor key={index} contributor={contributor} />
+          ))}
         </div>
-    )
-}
+      </div>
+    </section>
+  );
+};
 
-export default AboutUs
+export default AboutUs;

@@ -1,146 +1,131 @@
 "use client";
 import React from "react";
-import styles from "./footer.module.css";
 import Link from "next/link";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const disableLink = (event) => {
-    event.preventDefault();
-  };
+
   return (
-    <>
-      <div className={styles.footer_section}>
-        {/* --------Footer top section ----------- */}
-        <div className={styles.footer_top}>
-          {/* 1st div */}
-          <div className={`${styles.footer_item} ${styles.footer_item1} `}>
-            <h4 className={styles.footer_link_heading}>LNMIIT Alumni Portal</h4>
-            <p>
-              Welcome to LNMIIT Alumni Portal Page. This page is designed in view of
-              junior for interacting with seniors. They can also view various
-              resources inlcuding notes.
-            </p>
-          </div>
-
-          {/* 2nd div */}
-          <div className={`${styles.footer_item} ${styles.footer_item2} `}>
-            <h4 className={styles.footer_link_heading}>On this website</h4>
-            <div className={styles.dual_links_box}>
-              {/* link -left*/}
-              <ul>
-                <li>
-                  <Link href={"/"}>Home</Link>
-                </li>
-                <li>
-                  <Link href={"/batch"}>Batch</Link>
-                </li>
-                <li>
-                  <Link href={"/notes"}>Notes</Link>
-                </li>
-                <li>
-                  <Link href={"/gallery"}>Gallery</Link>
-                </li>
-              </ul>
-              {/* links - right*/}
-              <ul>
-                <li>
-                  <Link href={"/about"}>About </Link>
-                </li>
-                <li>
-                  <Link
-                    target="_blank"
-                    href={"https://firebasestorage.googleapis.com/v0/b/mca-community.appspot.com/o/documents%2Fhowto%2Fdocument.pdf?alt=media&token=9bdc2dc2-04c1-4273-8fb9-0479b077b490"}
-                  >
-                    Docs
-                  </Link>
-                </li>
-                <li>
-                  <p
-                  // after this link is done remove p & add Link
-                    href={"/events"}
-                    className={styles.disabled_link_text}
-                    onClick={disableLink}
-                  >
-                    Events
-                  </p>
-                </li>
-
-              </ul>
-            </div>
-          </div>
-          {/* 2nd div complete */}
-
-          {/* 3rd div */}
-          <div className={`${styles.footer_item} ${styles.footer_item3} `}>
-            <h4 className={styles.footer_link_heading}>Important Links</h4>
-            <ul>
-              <li>
-                <Link target="_blank" href={"https://lnmiit.ac.in/"}>
-                  LNMIIT Website{" "}
-                  <OpenInNewIcon className={styles.font_size_inherit} />{" "}
-                </Link>
-              </li>
-              <li>
-                <Link target="_blank" href={"https://erp.lnmiit.ac.in/mis/"}>
-                  LNMIIT MIS Portal{" "}
-                  <OpenInNewIcon className={styles.font_size_inherit} />{" "}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  target="_blank"
-                  href={
-                    "https://www.linkedin.com/school/lnmiitofficial/"
-                  }
-                >
-                  LNMIIT LinkedIn Page{" "}
-                  <OpenInNewIcon className={styles.font_size_inherit} />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  target="_blank"
-                  href={"https://x.com/lnmiit_official/"}
-                >
-                  LNMIIT X Page{" "}
-                  <OpenInNewIcon className={styles.font_size_inherit} />{" "}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* 4th div */}
-          <div className={`${styles.footer_item} ${styles.footer_item4} `}>
-            <h4 className={`${styles.footer_link_heading} !mb-0`}>Contact Us</h4>
-            <ul>
-              <li>
-                <p className={styles.technical_issue_text}>
-                  For any technical issues contact below:-
-                </p>
-              </li>
-              <li>
-                <p>22ucs062@lnmiit.ac.in</p>
-              </li>
-              <li>
-                <p>22ucs127@lnmiit.ac.in</p>
-              </li>
-              <li>
-                <p>22ucs112@lnmiit.ac.in</p>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* --------Footer bottom section ----------- */}
-        {/* <hr style={{backgroundColor:"grey", height:"1px"}} /> */}
-        <div className={styles.footer_bottom}>
-          <p>
-            Copyrights ©{`${currentYear}`} LNMIIT Alumni Portal. All rights reserved.{" "}
+    <footer className="bg-gray-900 text-gray-300 py-10">
+      {/* Top Section */}
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-6">
+        {/* About Section */}
+        <div>
+          <img
+            src="/images/LNMIIT_Logo.webp"
+            alt="LNMIIT Logo"
+            className="w-24 mb-4"
+          />
+          <p className="text-sm leading-relaxed">
+            Welcome to the LNMIIT Alumni Portal. This platform is designed to
+            foster connections between alumni and current students, enabling
+            collaboration, mentorship, and growth.
           </p>
         </div>
+
+        {/* Website Links */}
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-4">On This Website</h4>
+          <div className="flex space-x-8">
+            {/* First List */}
+            <ul className="space-y-2">
+              <li>
+                <Link href="/" className="hover:text-blue-400">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/batch" className="hover:text-blue-400">
+                  Batch
+                </Link>
+              </li>
+              <li>
+                <Link href="/posts" className="hover:text-blue-400">
+                  Posts
+                </Link>
+              </li>
+            </ul>
+            {/* Second List */}
+            <ul className="space-y-2">
+              <li>
+                <Link href="/gallery" className="hover:text-blue-400">
+                  Gallery
+                </Link>
+              </li>
+              <li>
+                <Link href="/about" className="hover:text-blue-400">
+                  About
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Important Links */}
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-4">Important Links</h4>
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="https://lnmiit.ac.in/"
+                target="_blank"
+                className="hover:text-blue-400 flex items-center"
+              >
+                LNMIIT Website <OpenInNewIcon className="ml-1 text-sm" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://erp.lnmiit.ac.in/mis/"
+                target="_blank"
+                className="hover:text-blue-400 flex items-center"
+              >
+                LNMIIT MIS Portal <OpenInNewIcon className="ml-1 text-sm" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://www.linkedin.com/school/lnmiitofficial/"
+                target="_blank"
+                className="hover:text-blue-400 flex items-center"
+              >
+                LNMIIT LinkedIn Page <OpenInNewIcon className="ml-1 text-sm" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://x.com/lnmiit_official/"
+                target="_blank"
+                className="hover:text-blue-400 flex items-center"
+              >
+                LNMIIT X Page <OpenInNewIcon className="ml-1 text-sm" />
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Contact Section */}
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-4">Contact Us</h4>
+          <p className="text-sm mb-2">
+            For any technical issues, contact:
+          </p>
+          <ul className="space-y-2">
+            <li>22ucs062@lnmiit.ac.in</li>
+            <li>22ucs127@lnmiit.ac.in</li>
+            <li>22ucs112@lnmiit.ac.in</li>
+          </ul>
+        </div>
       </div>
-    </>
+
+      {/* Bottom Section */}
+      <div className="border-t border-gray-700 mt-8 pt-4 text-center">
+        <p className="text-sm">
+          Copyright © {currentYear} LNMIIT Alumni Portal. All rights reserved.
+        </p>
+      </div>
+    </footer>
   );
 };
 

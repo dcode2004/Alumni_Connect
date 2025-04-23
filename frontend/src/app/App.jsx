@@ -53,6 +53,7 @@ const App = ({ children }) => {
                 }
                 <NavBar />
                 {children}
+                <br />
                 <Footer />
             </Provider>
         </>

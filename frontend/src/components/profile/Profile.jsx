@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import styles from "../../../src/app/registration/registrationform/css/page.module.css";
+import styles from "./Profile.module.css";
 import {
   Avatar,
   Button,
@@ -84,7 +84,7 @@ const Profile = () => {
 
             <div className={styles.registration_main_container}>
               {modal && <ProfileEditModal userDetails={activeUser} closeModal={closeModal} modalType={modalType} />}
-              
+
               {/* Following List Modal */}
               <FollowingListModal
                 open={followingModalOpen}
@@ -275,7 +275,7 @@ const Profile = () => {
                   <div className="relative w-full" >
                     <TextField
                       className={`${styles.input_field}`}
-                      style={{ margin: "0.5rem", marginRight:"0", marginLeft: "0" }}
+                      style={{ margin: "0.5rem", marginRight: "0", marginLeft: "0" }}
                       name="fieldOfInterest"
                       value={activeUser.fieldOfInterest || ""}
                       label="Field of interest"
