@@ -82,67 +82,45 @@ const AddGalleryModal = ({ setModal, setImages }) => {
     }
   };
 
-  const handleImageUpload = () => {
+  const handleImageUpload = async () => {
+    if (!image || !imageDetails.imageTitle.trim()) {
+      createModalAlert("Please select an image and provide a title");
+      return;
+    }
+
     try {
-        const url = `${baseApi}/api/post/createNewPost`;
-        startLoading();
-        const random_string = randomString.generate({
-          length: 6,
-          charset: "alphanumeric",
-        });
-        const docGivenName = imageDetails.imageTitle.split(" ")[0] + "_" + name.split(" ")[0] + "_" + new Date() + "_" + random_string;
-        const currentYear = new Date().getFullYear()
-        
-        const uploadImageRef = ref(storage, `images/gallery/${currentYear}/${docGivenName}`);
-        const file = image;
-        const metaData = { contentType: file.type, };
-        let localTime = moment().tz("Asia/Kolkata").format();
-        uploadBytes(uploadImageRef, file, metaData).then(async (snapshot) => {
-          let postUrl = await getDownloadURL(snapshot.ref);
-            // ---- call api starts ---
-        
-          const uploadPost = await fetch(url, {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-              'token': token
-            },
-            body: JSON.stringify({
-               postUrl ,
-               postTitle : imageDetails.imageTitle,
-               postDescription : imageDetails.imageDescription,
-               docGivenName,
-               timeStamp : localTime ,
-               postType : "gallery"
-            })
-          })
-          const response = await uploadPost.json();
-          stopLoading();
-          setModal(false);
-          // ---- call api ends ---
-          // Alert message
-          // fetch all Existing gallery posts
-          if (response.success) {
-            setImages((prev)=>{
-                return [response.data.post, ...prev]
-            })
-            createAlert("success", response.message.split("#")[0])
-            return
-          }
-  
-          createAlert("error", response.message.split("#")[0])
-        }).catch((error) => {
-          stopLoading();
-          setModal(false);
-          console.log(error);
-          createAlert("error", "Some error in uploading post");
-        });
-      } catch (error) {
-        stopLoading();
+      startLoading();
+      
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('postTitle', imageDetails.imageTitle.trim());
+      formData.append('postDescription', imageDetails.imageDescription.trim());
+      formData.append('postYear', new Date().getFullYear().toString());
+
+      const url = `${baseApi}/api/gallery/upload`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'token': token
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+      stopLoading();
+
+      if (data.success) {
+        setImages((prev) => [data.data.post, ...prev]);
+        createAlert("success", "Image uploaded successfully");
         setModal(false);
-        console.log("There is some error : ", error);
-        createAlert("error", "Some error in uploading post");
+      } else {
+        createAlert("error", data.message || "Failed to upload image");
       }
+    } catch (error) {
+      stopLoading();
+      console.error("Error uploading image:", error);
+      createAlert("error", "Failed to upload image. Please try again.");
+    }
   };
 
   return (
