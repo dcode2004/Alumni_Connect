@@ -3,6 +3,68 @@ const router = express.Router();
 const authorizeUser = require("../middlewares/authorizeUser");
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const admin = require("firebase-admin");
+
+// Initialize Firebase Admin if not already initialized
+let bucket;
+if (admin.apps.length) {
+  try {
+    bucket = admin.storage().bucket();
+    // Only log in development environment
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "Using existing Firebase Admin SDK instance in postRoutes.js"
+      );
+    }
+  } catch (error) {
+    console.error("Error getting Firebase bucket in postRoutes.js:", error);
+  }
+}
+
+// Helper function to extract file path from Firebase URL
+const extractFilePathFromUrl = (url) => {
+  try {
+    if (!url || typeof url !== "string") {
+      console.error("Invalid URL passed to extractFilePathFromUrl:", url);
+      return null;
+    }
+
+    // Check if the URL is a Firebase Storage URL
+    if (!url.includes("firebasestorage.googleapis.com")) {
+      console.error("Not a Firebase Storage URL:", url);
+      return null;
+    }
+
+    // Extract the path from various Firebase URL formats
+
+    // Format 1: https://firebasestorage.googleapis.com/v0/b/[bucket]/o/[encoded_path]?alt=media&token=[token]
+    if (url.includes("/o/")) {
+      const pathStartIndex = url.indexOf("/o/") + 3;
+      const pathEndIndex = url.indexOf("?", pathStartIndex);
+
+      if (pathEndIndex !== -1) {
+        const encodedPath = url.substring(pathStartIndex, pathEndIndex);
+        // Firebase encodes paths with %2F instead of /
+        return decodeURIComponent(encodedPath);
+      }
+    }
+
+    // Format 2: https://storage.googleapis.com/[bucket]/[path]
+    if (url.includes("storage.googleapis.com")) {
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split("/");
+      // Remove the first empty segment and the bucket name
+      pathParts.splice(0, 2);
+      return pathParts.join("/");
+    }
+
+    console.error("Could not extract path from Firebase URL:", url);
+    return null;
+  } catch (error) {
+    console.error("Error extracting file path:", error);
+    return null;
+  }
+};
 
 // Create a new post
 router.post("/create", authorizeUser, async (req, res) => {
@@ -75,6 +137,35 @@ router.put("/:postId", authorizeUser, async (req, res) => {
         success: false,
         message: "Post content is required",
       });
+    }
+
+    // Check if media URL is from Firebase Storage
+    if (
+      media &&
+      typeof media === "string" &&
+      !media.includes("firebasestorage.googleapis.com")
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid media URL format",
+      });
+    }
+
+    // Delete old media file if changed or removed
+    if (post.media && post.media !== media && bucket) {
+      try {
+        const filePath = extractFilePathFromUrl(post.media);
+        if (filePath) {
+          await bucket.file(filePath).delete();
+          console.log(`Old post media file deleted from Firebase: ${filePath}`);
+        }
+      } catch (fileError) {
+        console.error(
+          "Error deleting old media file from Firebase:",
+          fileError
+        );
+        // Continue with post update even if file deletion fails
+      }
     }
 
     post.content = content.trim();
@@ -199,6 +290,23 @@ router.delete("/:postId", authorizeUser, async (req, res) => {
       });
     }
 
+    // Delete the media file from Firebase if it exists
+    if (post.media && bucket) {
+      try {
+        const filePath = extractFilePathFromUrl(post.media);
+        if (filePath) {
+          const file = bucket.file(filePath);
+          const [exists] = await file.exists();
+
+          if (exists) {
+            await file.delete();
+          }
+        }
+      } catch (fileError) {
+        // Silently continue with post deletion even if file deletion fails
+      }
+    }
+
     await Post.findByIdAndDelete(postId);
 
     res.json({
@@ -206,8 +314,11 @@ router.delete("/:postId", authorizeUser, async (req, res) => {
       message: "Post deleted successfully",
     });
   } catch (error) {
-    console.error("Delete post error:", error);
-    res.status(500).json({
+    // Only log errors in development mode
+    if (process.env.NODE_ENV === "development") {
+      console.error("Delete post error:", error);
+    }
+    return res.status(500).json({
       success: false,
       message: "Error deleting post",
       error: error.message,

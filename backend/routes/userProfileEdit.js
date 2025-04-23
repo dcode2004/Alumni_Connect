@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authorizeUser = require("../middlewares/authorizeUser");
 const User = require("../models/userModel");
+const admin = require("firebase-admin");
 const {
   getStorage,
   ref,
@@ -10,42 +11,143 @@ const {
   getDownloadURL,
 } = require("firebase/storage");
 const { initializeApp } = require("firebase/app");
-// Delete profile picture
 const firebaseConfig = require("../firebase/firebaseConfig");
+const firebaseAdminConfig = require("../firebase/firebaseAdminSdk");
+
+// Initialize client-side Firebase for uploads
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
+// Ensure Firebase Admin is initialized (for deleting files)
+let bucket;
+// Use existing Firebase Admin SDK if already initialized
+if (admin.apps.length) {
+  try {
+    bucket = admin.storage().bucket();
+    // Only log in development environment
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        "Using existing Firebase Admin SDK instance in userProfileEdit.js"
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Error getting Firebase bucket in userProfileEdit.js:",
+      error
+    );
+  }
+}
+
+// Helper function to extract file path from Firebase URL (same as in postRoutes.js)
+const extractFilePathFromUrl = (url) => {
+  try {
+    if (!url || typeof url !== "string") {
+      console.error("Invalid URL passed to extractFilePathFromUrl:", url);
+      return null;
+    }
+
+    // Check if the URL is a Firebase Storage URL
+    if (!url.includes("firebasestorage.googleapis.com")) {
+      console.error("Not a Firebase Storage URL:", url);
+      return null;
+    }
+
+    // Extract the path from various Firebase URL formats
+
+    // Format 1: https://firebasestorage.googleapis.com/v0/b/[bucket]/o/[encoded_path]?alt=media&token=[token]
+    if (url.includes("/o/")) {
+      const pathStartIndex = url.indexOf("/o/") + 3;
+      const pathEndIndex = url.indexOf("?", pathStartIndex);
+
+      if (pathEndIndex !== -1) {
+        const encodedPath = url.substring(pathStartIndex, pathEndIndex);
+        // Firebase encodes paths with %2F instead of /
+        return decodeURIComponent(encodedPath);
+      }
+    }
+
+    // Format 2: https://storage.googleapis.com/[bucket]/[path]
+    if (url.includes("storage.googleapis.com")) {
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split("/");
+      // Remove the first empty segment and the bucket name
+      pathParts.splice(0, 2);
+      return pathParts.join("/");
+    }
+
+    console.error("Could not extract path from Firebase URL:", url);
+    return null;
+  } catch (error) {
+    console.error("Error extracting file path:", error);
+    return null;
+  }
+};
+
+// Delete profile picture
 router.delete("/profilePicture", authorizeUser, async (req, res) => {
   try {
     const userId = req.userId;
-    const findUser = await User.findById(userId);
-    const batch = findUser.batchNum;
-    const givenName = findUser.profilePic.givenName;
-    const deleteProfileImageRef = ref(
-      storage,
-      `images/profileImages/${batch}/${givenName}`
-    );
+    const { sameUser, editingUserId } = req.query;
 
-    deleteObject(deleteProfileImageRef)
-      .then(async () => {
-        findUser.profilePic.givenName = "";
-        findUser.profilePic.url = "";
-        await findUser.save();
-        return res.json({
-          success: true,
-          message: "Profile pic deleted. #",
-        });
-      })
-      .catch((error) => {
-        console.log("Error in deleting image", error);
-        return res.json({
-          success: false,
-          message: "Some error in deleting Profile pic deleted. #",
-        });
+    // Determine which user ID to use (for admin operations)
+    const targetUserId =
+      sameUser === "false" && editingUserId ? editingUserId : userId;
+
+    const findUser = await User.findById(targetUserId);
+
+    if (!findUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found #",
       });
+    }
+
+    // If no profile picture, nothing to delete
+    if (!findUser.profilePic || !findUser.profilePic.url) {
+      findUser.profilePic = { url: "", givenName: "" };
+      await findUser.save();
+      return res.json({
+        success: true,
+        message: "No profile picture to delete #",
+      });
+    }
+
+    const profilePicUrl = findUser.profilePic.url;
+
+    // Try to delete from Firebase using Admin SDK (if available)
+    if (bucket) {
+      try {
+        const filePath = extractFilePathFromUrl(profilePicUrl);
+
+        if (filePath) {
+          const file = bucket.file(filePath);
+
+          // First check if file exists
+          const [exists] = await file.exists();
+
+          if (exists) {
+            await file.delete();
+          }
+        }
+      } catch (deleteError) {
+        // Silently continue with profile update even if file deletion fails
+      }
+    }
+
+    // Update user profile in database regardless of file deletion success
+    findUser.profilePic = { url: "", givenName: "" };
+    await findUser.save();
+
+    return res.json({
+      success: true,
+      message: "Profile picture deleted successfully #",
+    });
   } catch (error) {
-    console.log("There is some error in deleting profile picture ", error);
-    return res.status(505).json({
+    // Only log errors in development mode
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error in deleting profile picture:", error);
+    }
+    return res.status(500).json({
       success: false,
       message: "Some error occurred # internal server",
     });

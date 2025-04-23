@@ -238,11 +238,11 @@ const Feed = () => {
                 </div>
 
                 {post.media && (
-                  <div className="mb-6 rounded-lg overflow-hidden">
+                  <div className="mb-6 rounded-lg overflow-hidden h-64 md:h-80">
                     <img
                       src={post.media}
                       alt="Post media"
-                      className="w-full h-auto"
+                      className="w-full h-full object-contain bg-gray-50"
                     />
                   </div>
                 )}
