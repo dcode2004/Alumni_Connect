@@ -4,6 +4,10 @@ import ActiveUserAndLoginStatusContext from "@/context/activeUserAndLoginStatus/
 import { Avatar } from "@mui/material";
 import CategoryTag from "./CategoryTag";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { firebaseConfig } from "../../../firebase/firebase";
+import randomString from "randomstring";
 
 const CATEGORIES = [
   "Interview Experience",
@@ -17,8 +21,14 @@ const CreatePost = ({ onPostCreated }) => {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("General");
   const [media, setMedia] = useState(null);
+  const [mediaFile, setMediaFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const { activeUser } = useContext(ActiveUserAndLoginStatusContext);
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const storage = getStorage(app);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,10 +36,36 @@ const CreatePost = ({ onPostCreated }) => {
 
     setLoading(true);
     try {
-      await createPost(content, category, media);
+      let mediaUrl = null;
+      
+      // Upload image to Firebase if selected
+      if (mediaFile) {
+        const random_string = randomString.generate({
+          length: 6,
+          charset: "alphanumeric",
+        });
+        
+        const timestamp = Date.now();
+        const { batchNum } = activeUser || {};
+        const fileName = `post_${timestamp}_${random_string}`;
+        const storageRef = ref(storage, `images/posts/${batchNum || 'general'}/${fileName}`);
+        
+        const metadata = { contentType: mediaFile.type };
+        
+        // Upload the file to Firebase Storage
+        const uploadSnapshot = await uploadBytes(storageRef, mediaFile, metadata);
+        
+        // Get the download URL
+        mediaUrl = await getDownloadURL(uploadSnapshot.ref);
+      }
+
+      // Create post with Firebase media URL if uploaded
+      await createPost(content, category, mediaUrl);
       setContent("");
       setCategory("General");
       setMedia(null);
+      setMediaFile(null);
+      setUploadProgress(0);
       onPostCreated?.();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -41,8 +77,16 @@ const CreatePost = ({ onPostCreated }) => {
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Here you would typically upload the file to a storage service
-      // and get back a URL to store in the media field
+      // Check file size (limit to 5 MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size exceeds 5MB limit. Please select a smaller image.");
+        return;
+      }
+      
+      // Store the file for upload during post submission
+      setMediaFile(file);
+      
+      // Create a temporary preview URL
       setMedia(URL.createObjectURL(file));
     }
   };
@@ -100,14 +144,19 @@ const CreatePost = ({ onPostCreated }) => {
 
         {media ? (
           <div className="relative group">
-            <img
-              src={media}
-              alt="Preview"
-              className="w-full h-64 object-cover rounded-lg"
-            />
+            <div className="h-64 md:h-80 rounded-lg overflow-hidden bg-gray-50">
+              <img
+                src={media}
+                alt="Preview"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <button
               type="button"
-              onClick={() => setMedia(null)}
+              onClick={() => {
+                setMedia(null);
+                setMediaFile(null);
+              }}
               className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +179,7 @@ const CreatePost = ({ onPostCreated }) => {
             >
               <div className="flex flex-col items-center">
                 <CloudUploadIcon className="w-8 h-8 text-gray-400 mb-2" />
-                <span className="text-sm text-gray-500">Click to upload an image</span>
+                <span className="text-sm text-gray-500">Click to upload an image (max 5MB)</span>
               </div>
             </label>
           </div>

@@ -124,11 +124,11 @@ export const deletePost = async (postId) => {
   }
 };
 
-export const updatePost = async (postId, content, category) => {
+export const updatePost = async (postId, content, category, media) => {
   try {
     const response = await axios.put(
       `${API_URL}/api/posts/${postId}`,
-      { content, category },
+      { content, category, media },
       {
         headers: {
           token: localStorage.getItem("token"),

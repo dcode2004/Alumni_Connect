@@ -67,7 +67,7 @@ const EditProfilePicture = ({ profilePic, name, batchNum, closeModal, sameUser, 
     setProfileUrl("");
   };
 
-  const handleDeleteImage = async (deleteDirect,imageRef, imageName) => {
+  const handleDeleteImage = async (deleteDirect, imageRef, imageName) => {
     // deleteDirect argument -> true or false , 
     // deleteDirect true -> user have directly clicked deleted button 
     // deleteDirect false -> user uploaded new image over existing one
@@ -109,14 +109,14 @@ const EditProfilePicture = ({ profilePic, name, batchNum, closeModal, sameUser, 
         return true;
       }
       if (deleteDirect) {
-        createAlert("error", "Some error updating profile");
+        createAlert("error", response.message.split("#")[0] || "Some error updating profile");
       }
       return false;
     } catch (error) {
       if (deleteDirect) {
         closeModal();
         stopLoading();
-        console.log("There is some error : ", error);
+        console.log("There is some error: ", error);
         createAlert("error", "Some error updating profile");
       }
       return null;
