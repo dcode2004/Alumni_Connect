@@ -109,6 +109,38 @@ const userSchema = new Schema({
       default: "",
     },
   },
+  lastLogin: {
+    timestamp: {
+      type: Date,
+      default: null,
+    },
+    location: {
+      latitude: {
+        type: Number,
+        default: null,
+      },
+      longitude: {
+        type: Number,
+        default: null,
+      },
+      city: {
+        type: String,
+        default: "",
+      },
+      state: {
+        type: String,
+        default: "",
+      },
+      country: {
+        type: String,
+        default: "",
+      },
+      ipAddress: {
+        type: String,
+        default: "",
+      },
+    },
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

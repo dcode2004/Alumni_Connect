@@ -38,6 +38,20 @@ const adminEmail = process.env.ADMIN_NOTIFY_EMAIL; // admin will be notified whe
 // });
 
 const authorizeUser = require("../middlewares/authorizeUser");
+const getLocationFromIP = require("../helper/getLocationFromIP");
+
+// Helper function to get client IP address
+const getClientIP = (req) => {
+  return (
+    req.headers["x-forwarded-for"]?.split(",")[0] ||
+    req.headers["x-real-ip"] ||
+    req.connection?.remoteAddress ||
+    req.socket?.remoteAddress ||
+    req.ip ||
+    "unknown"
+  );
+};
+
 router.post("/createUser", upload.single("imageFile"), async (req, res) => {
   try {
     const textData = JSON.parse(req.body.textData);
@@ -162,9 +176,44 @@ router.post("/loginViaGoogle", async (req, res) => {
     // const decodedToken = await admin.auth().verifyIdToken(req.body.uid);
     // const email = decodedToken.email; // User's email
 
-    const { email } = req.body;
+    const { email, location } = req.body; // location from frontend (optional)
     const isExist = await User.findOne({ email });
     if (isExist) {
+      // Get client IP address
+      const clientIP = getClientIP(req);
+      
+      // Prepare location data
+      let locationData = {
+        latitude: null,
+        longitude: null,
+        city: "",
+        state: "",
+        country: "",
+        ipAddress: clientIP,
+      };
+
+      // If frontend provided location (from browser geolocation)
+      if (location && location.latitude && location.longitude) {
+        locationData.latitude = location.latitude;
+        locationData.longitude = location.longitude;
+        locationData.city = location.city || "";
+        locationData.state = location.state || "";
+        locationData.country = location.country || "";
+      } else {
+        // Fallback: Get location from IP address
+        const ipLocation = await getLocationFromIP(clientIP);
+        locationData.city = ipLocation.city;
+        locationData.state = ipLocation.state;
+        locationData.country = ipLocation.country;
+      }
+
+      // Update last login information
+      isExist.lastLogin = {
+        timestamp: new Date(),
+        location: locationData,
+      };
+      await isExist.save();
+
       // --- Create JWT token ---
       const data = { userId: isExist._id };
       const token = jwt.sign(data, process.env.JWT_SECRET_CODE);
@@ -184,6 +233,7 @@ router.post("/loginViaGoogle", async (req, res) => {
       });
     }
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({
       success: false,
       message: "Some internal server occurred! Try after some time",
@@ -194,7 +244,7 @@ router.post("/loginViaGoogle", async (req, res) => {
 // ROUTE 3 :: Login by email & password manually
 router.post("/loginManually", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, location } = req.body; // location from frontend (optional)
     const isExist = await User.findOne({ email });
     if (isExist) {
       // verify user password
@@ -203,6 +253,41 @@ router.post("/loginManually", async (req, res) => {
         isExist.userDetails.password
       );
       if (isPassMatched) {
+        // Get client IP address
+        const clientIP = getClientIP(req);
+        
+        // Prepare location data
+        let locationData = {
+          latitude: null,
+          longitude: null,
+          city: "",
+          state: "",
+          country: "",
+          ipAddress: clientIP,
+        };
+
+        // If frontend provided location (from browser geolocation)
+        if (location && location.latitude && location.longitude) {
+          locationData.latitude = location.latitude;
+          locationData.longitude = location.longitude;
+          locationData.city = location.city || "";
+          locationData.state = location.state || "";
+          locationData.country = location.country || "";
+        } else {
+          // Fallback: Get location from IP address
+          const ipLocation = await getLocationFromIP(clientIP);
+          locationData.city = ipLocation.city;
+          locationData.state = ipLocation.state;
+          locationData.country = ipLocation.country;
+        }
+
+        // Update last login information
+        isExist.lastLogin = {
+          timestamp: new Date(),
+          location: locationData,
+        };
+        await isExist.save();
+
         const data = { userId: isExist._id };
         const token = jwt.sign(data, process.env.JWT_SECRET_CODE);
         const user = await User.findById(isExist._id)
@@ -228,6 +313,7 @@ router.post("/loginManually", async (req, res) => {
       });
     }
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({
       success: false,
       message: "Some internal server occurred! Try after some time",

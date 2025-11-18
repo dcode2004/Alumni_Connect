@@ -8,7 +8,8 @@ import {
   TextField,
   Typography,
   Box,
-  Modal
+  Modal,
+  InputAdornment
 } from "@mui/material";
 import UserTypeForm from "../../app/registration/registrationform/UserTypeForm";
 import activeUserAndLoginContext from "@/context/activeUserAndLoginStatus/activeUserAndLoginStatusContext";
@@ -23,6 +24,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Link from "next/link";
 import EditJobDetails from "./EditJobDetails";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const modalStyle = {
   position: 'absolute',
@@ -250,6 +252,43 @@ const Profile = () => {
                     variant="filled"
                     disabled
                   ></TextField>
+
+                  {/* --- Current Location --- */}
+                  <div className="relative" >
+                    <TextField
+                      className={styles.input_field}
+                      style={{ margin: "0.5rem", marginLeft: "0" }}
+                      name="currentLocation"
+                      value={
+                        activeUser.lastLogin?.location?.city && activeUser.lastLogin?.location?.state
+                          ? `${activeUser.lastLogin.location.city}, ${activeUser.lastLogin.location.state}, ${activeUser.lastLogin.location.country || ""}`
+                          : "Not set"
+                      }
+                      fullWidth
+                      label="Current Location"
+                      variant="filled"
+                      disabled
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LocationOnIcon sx={{ color: '#3584FC' }} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <EditOption className={"absolute right-1 top-7"} onClick={() => { showModal("location") }} editText={"Edit"} />
+                  </div>
+                  {activeUser.lastLogin?.timestamp && (
+                    <Typography variant="caption" className="text-gray-500 text-xs ml-2">
+                      Last updated: {new Date(activeUser.lastLogin.timestamp).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </Typography>
+                  )}
 
                   {/* --- Graduation --- */}
                   <div className="relative" >

@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../../../firebase/firebase";
 import ActiveUserAndLoginStatusContext from "../activeUserAndLoginStatus/activeUserAndLoginStatusContext";
+import { getUserLocation } from "../../helper/getUserLocation";
 
 const RegistrationStates = (props) => {
   // ---- context API ----
@@ -55,9 +56,12 @@ const RegistrationStates = (props) => {
   };
 
   // ----- SIGN IN VIA GOOGLE ------
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
+      // Get user location before login
+      const location = await getUserLocation();
+      
       signInWithPopup(auth, provider)
         .then(async (result) => {
           // token of user to be sent to server
@@ -69,6 +73,7 @@ const RegistrationStates = (props) => {
           const userDetails = {
             uid: accessToken,
             email: user.email,
+            location: location, // Include location data
           };
           const loginUser = await fetch(url, {
             method: "POST",
@@ -145,6 +150,10 @@ const RegistrationStates = (props) => {
   const signInManually = async (loginDetails) => {
     const url = `${baseUrl}/api/user/loginManually`;
     setLoading(true);
+    
+    // Get user location before login
+    const location = await getUserLocation();
+    
     // call api
     try {
       const loginUser = await fetch(url, {
@@ -152,7 +161,10 @@ const RegistrationStates = (props) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginDetails),
+        body: JSON.stringify({
+          ...loginDetails,
+          location: location, // Include location data
+        }),
       });
       const response = await loginUser.json();
       if (response.success) {

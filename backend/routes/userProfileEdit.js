@@ -304,4 +304,61 @@ router.put("/jobDetails", authorizeUser, async (req, res) => {
   }
 });
 
+// Update current location
+router.put("/location", authorizeUser, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { city, state, country } = req.body;
+
+    if (!city || !state || !country) {
+      return res.status(400).json({
+        success: false,
+        message: "City, state, and country are required",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update location in lastLogin (preserve timestamp and other data)
+    if (!user.lastLogin) {
+      user.lastLogin = {
+        timestamp: new Date(),
+        location: {
+          latitude: null,
+          longitude: null,
+          city: "",
+          state: "",
+          country: "",
+          ipAddress: "",
+        },
+      };
+    }
+
+    user.lastLogin.location.city = city;
+    user.lastLogin.location.state = state;
+    user.lastLogin.location.country = country;
+    // Keep existing latitude, longitude, and ipAddress if they exist
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      message: "Location updated successfully",
+      location: user.lastLogin.location,
+    });
+  } catch (error) {
+    console.log("Error in updating location:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+});
+
 module.exports = router;

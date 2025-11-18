@@ -108,6 +108,12 @@ const Page = ({ params }) => {
           return student.fieldOfInterest.toLowerCase().includes(searchLower);
         case "state":
           return student.userDetails.homeState.toLowerCase().includes(searchLower);
+        case "location":
+          // Filter by current location (city, state, or country)
+          const currentLocation = student.lastLogin?.location;
+          if (!currentLocation) return false;
+          const locationString = `${currentLocation.city || ""} ${currentLocation.state || ""} ${currentLocation.country || ""}`.toLowerCase();
+          return locationString.includes(searchLower);
         default:
           return true;
       }
@@ -141,7 +147,8 @@ const Page = ({ params }) => {
                     <MenuItem value="company">Company</MenuItem>
                     <MenuItem value="role">Role</MenuItem>
                     <MenuItem value="field">Field of Interest</MenuItem>
-                    <MenuItem value="state">State</MenuItem>
+                    <MenuItem value="state">Home State</MenuItem>
+                    <MenuItem value="location">Current Location</MenuItem>
                   </Select>
                 </FormControl>
                 

@@ -12,6 +12,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Link from "next/link";
 import EmailIcon from '@mui/icons-material/Email';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import VerificationStatus from "@/components/header/VerificationStatus";
 import { followUser, unfollowUser, getFollowStatus } from "@/services/followService";
 import { useContext } from "react";
@@ -126,6 +127,14 @@ const StudentCard = (props) => {
           <Typography className="text-xs" >
             From : {homeState}
           </Typography>
+          {/* Current Location */}
+          {props.student.lastLogin?.location?.city && (
+            <Typography className="text-xs mt-1 flex items-center gap-1" style={{ color: '#3584FC' }}>
+              <LocationOnIcon sx={{ fontSize: '14px' }} />
+              Currently in: {props.student.lastLogin.location.city}
+              {props.student.lastLogin.location.state && `, ${props.student.lastLogin.location.state}`}
+            </Typography>
+          )}
           <div className="min-h-[64px] mt-2 overflow-y-auto" >
             {fieldOfInterest === "nothing selected" ? 
               <></>

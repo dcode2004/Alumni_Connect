@@ -5,6 +5,7 @@ import EditGraduation from '../profile/EditGraduation';
 import EditFieldOfInterest from '../profile/EditFieldOfInterest';
 import EditSocialLinks from '../profile/EditSocialLinks';
 import EditProfilePicture from '../profile/EditProfilePicture';
+import EditLocation from '../profile/EditLocation';
 
 const ProfileEditModal = ({ closeModal, modalType, userDetails , sameUser, editingUserId, fetchUserAccounts}) => {
 
@@ -69,6 +70,14 @@ const ProfileEditModal = ({ closeModal, modalType, userDetails , sameUser, editi
                      sameUser={sameUser}
                      editingUserId={editingUserId}
                      fetchUserAccounts={fetchUserAccounts}
+                    />
+                }
+
+                {/* edit location */}
+                {modalType === "location" && 
+                   <EditLocation 
+                     closeModal={closeModal} 
+                     location={userDetails.lastLogin?.location} 
                     />
                 }
             </div>
