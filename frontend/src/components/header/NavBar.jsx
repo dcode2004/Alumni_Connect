@@ -90,6 +90,17 @@ const NavBar = () => {
             </li>
             <li>
               <Link
+                className={`${
+                  currentUrlPath.startsWith("/seminar") && "text-sky-500"
+                }`}
+                shallow={true}
+                href="/seminar"
+              >
+                Seminar
+              </Link>
+            </li>
+            <li>
+              <Link
                 // className={`${currentUrlPath === "/notes" && 'text-sky-500'}`}
                 className={`${
                   currentUrlPath.startsWith("/posts") && "text-sky-500"
