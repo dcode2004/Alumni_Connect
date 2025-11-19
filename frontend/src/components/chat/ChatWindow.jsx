@@ -129,22 +129,22 @@ const ChatWindow = ({ chat, onBack }) => {
 
   if (!chat)
     return (
-      <div className="flex-1 flex items-center justify-center text-gray-500">
+      <div className="flex-1 flex items-center justify-center text-gray-500 dark:text-gray-400">
         Select a chat to start messaging
       </div>
     );
 
   return (
     <div className="flex-1 flex flex-col h-full">
-      <div className="p-4 border-b bg-gradient-to-r from-sky-50 to-blue-50 shadow-sm">
+      <div className="p-4 border-b dark:border-gray-700 bg-gradient-to-r from-sky-50 to-blue-50 dark:from-gray-700 dark:to-gray-800 shadow-sm transition-colors duration-300">
         <div className="flex items-center gap-3">
           {onBack && (
             <button
               onClick={onBack}
-              className="md:hidden mr-2 p-2 rounded-md bg-white bg-opacity-60 hover:bg-opacity-100"
+              className="md:hidden mr-2 p-2 rounded-md bg-white dark:bg-gray-700 bg-opacity-60 dark:bg-opacity-80 hover:bg-opacity-100 dark:hover:bg-opacity-100 transition-colors"
             >
               <svg
-                className="w-5 h-5 text-sky-700"
+                className="w-5 h-5 text-sky-700 dark:text-sky-300"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
@@ -158,17 +158,17 @@ const ChatWindow = ({ chat, onBack }) => {
             </button>
           )}
           {chat.type === "group" ? (
-            <div className="w-10 h-10 rounded-full bg-sky-200 flex items-center justify-center text-sky-800 font-semibold text-sm">
+            <div className="w-10 h-10 rounded-full bg-sky-200 dark:bg-sky-600 flex items-center justify-center text-sky-800 dark:text-sky-100 font-semibold text-sm">
               B{chat.batchNum}
             </div>
           ) : otherUserData?.profilePic?.url ? (
             <img
               src={otherUserData.profilePic.url}
               alt={otherUserData.name || "User"}
-              className="w-10 h-10 rounded-full object-cover border border-gray-200"
+              className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-600"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-semibold text-sm">
+            <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200 font-semibold text-sm">
               {(
                 otherUserData?.name ||
                 otherUserData?.userDetails?.name ||
@@ -179,14 +179,14 @@ const ChatWindow = ({ chat, onBack }) => {
             </div>
           )}
           <div className="flex-1">
-            <div className="text-lg font-semibold text-gray-900">
+            <div className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {chat.type === "private"
                 ? otherUserData?.name ||
                   otherUserData?.userDetails?.name ||
                   chat.title
                 : chat.title}
             </div>
-            <div className="text-xs text-gray-600">
+            <div className="text-xs text-gray-600 dark:text-gray-400">
               {chat.type === "group"
                 ? `Batch ${chat.batchNum} group chat`
                 : `Direct message${
@@ -205,7 +205,7 @@ const ChatWindow = ({ chat, onBack }) => {
 
       <div
         ref={scrollRef}
-        className="flex-1 overflow-auto p-3 sm:p-4 bg-gradient-to-br from-blue-50 via-white to-purple-50"
+        className="flex-1 overflow-auto p-3 sm:p-4 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300"
       >
         <AnimatePresence initial={false} mode="popLayout">
           {messages.map((m) => {
@@ -224,12 +224,12 @@ const ChatWindow = ({ chat, onBack }) => {
                 {!mine && (
                   <div className="flex flex-col w-full">
                     {chat.type === "group" && (
-                      <div className="text-xs text-gray-600 mb-1 ml-10">
+                      <div className="text-xs text-gray-600 dark:text-gray-400 mb-1 ml-10">
                         {m.senderName || "User"}
                       </div>
                     )}
                     <div className="flex gap-2">
-                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-300 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-gray-700 overflow-hidden">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-gray-700 dark:text-gray-200 overflow-hidden">
                         {senderProfiles[m.senderId]?.profilePic?.url ? (
                           <img
                             src={senderProfiles[m.senderId].profilePic.url}
@@ -246,13 +246,13 @@ const ChatWindow = ({ chat, onBack }) => {
                         className={`${
                           mine
                             ? "bg-sky-600 text-white shadow-md"
-                            : "bg-white text-gray-900 border border-gray-100 shadow-sm"
+                            : "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-100 dark:border-gray-600 shadow-sm"
                         } max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-lg`}
                       >
                         <div className="text-sm break-words">{m.text}</div>
                         <div
                           className={`text-xs mt-1 text-right ${
-                            mine ? "text-sky-100" : "text-gray-400"
+                            mine ? "text-sky-100" : "text-gray-400 dark:text-gray-400"
                           }`}
                         >
                           {m.createdAt?.toDate
@@ -269,13 +269,13 @@ const ChatWindow = ({ chat, onBack }) => {
                       className={`${
                         mine
                           ? "bg-sky-600 text-white shadow-md"
-                          : "bg-white text-gray-900 border border-gray-100 shadow-sm"
+                          : "bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-100 dark:border-gray-600 shadow-sm"
                       } max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-lg`}
                     >
                       <div className="text-sm break-words">{m.text}</div>
                       <div
                         className={`text-xs mt-1 text-right ${
-                          mine ? "text-sky-100" : "text-gray-400"
+                          mine ? "text-sky-100" : "text-gray-400 dark:text-gray-400"
                         }`}
                       >
                         {m.createdAt?.toDate
@@ -291,9 +291,9 @@ const ChatWindow = ({ chat, onBack }) => {
         </AnimatePresence>
       </div>
 
-      <div className="p-3 sm:p-4 border-t bg-white border-t-gray-200 flex items-center gap-2 sm:gap-3">
+      <div className="p-3 sm:p-4 border-t bg-white dark:bg-gray-800 border-t-gray-200 dark:border-t-gray-700 flex items-center gap-2 sm:gap-3 transition-colors duration-300">
         <input
-          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 sm:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+          className="flex-1 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg px-3 py-2 sm:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition placeholder-gray-400 dark:placeholder-gray-500"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Type a message..."

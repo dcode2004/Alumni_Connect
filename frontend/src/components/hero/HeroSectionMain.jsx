@@ -8,19 +8,19 @@ import Image from "next/image";
 const HeroSectionMain = () => {
   return (
     <>
-      <div className={`${styles.hero_main_container} bg-white text-black`}>
+      <div className={`${styles.hero_main_container} bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300`}>
         <div className={`${styles.container_box} max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center lg:items-start`}>
           {/* Left Section */}
           <div className={`${styles.left_section} flex-1 text-center lg:text-left lg:pr-10`}>
             <h1 className={`${styles.hero_heading} font-extrabold text-4xl lg:text-5xl leading-tight mb-6`}>
               Welcome to LNMIIT <br />
-              <span className="text-blue-500">Alumni Portal</span>
+              <span className="text-blue-500 dark:text-blue-400">Alumni Portal</span>
             </h1>
-            <p className="text-lg lg:text-xl mb-4">
-              Managed & maintained by <span className="text-blue-500">LNMIIT</span> students
+            <p className="text-lg lg:text-xl mb-4 dark:text-gray-200">
+              Managed & maintained by <span className="text-blue-500 dark:text-blue-400">LNMIIT</span> students
             </p>
             <TypeWriter />
-            <p className={`${styles.hero_text} text-base lg:text-lg mb-8 leading-relaxed`}>
+            <p className={`${styles.hero_text} text-base lg:text-lg mb-8 leading-relaxed dark:text-gray-300`}>
               This platform is designed to keep all LNMIIT students connected in one place. Access semester notes, assignments, and more. Stay connected with seniors, juniors, and classmates.
             </p>
             <div className="flex justify-center lg:justify-start gap-4">

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Box, IconButton, Badge } from "@mui/material";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import ChatbotWindow from "./ChatbotWindow";
+import DarkModeToggle from "@/components/header/DarkModeToggle";
 
 const ChatbotWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +14,20 @@ const ChatbotWidget = () => {
 
   return (
     <>
+      {/* Dark Mode Toggle - Above Chatbot Button */}
+      {!isOpen && (
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: { xs: 100, sm: 108 },
+            right: { xs: 24, sm: 32 },
+            zIndex: 999,
+          }}
+        >
+          <DarkModeToggle />
+        </Box>
+      )}
+
       {/* Floating Button */}
       {!isOpen && (
         <Box

@@ -24,14 +24,33 @@
 html, body {
   overflow-x: hidden; /* Prevent horizontal scrolling */
   max-width: 100%; /* Ensure no element exceeds the viewport width */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Light mode (default) */
+body {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Dark mode */
+.dark body {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 50%, #1a2d4a 100%);
+  color: #ffffff;
+}
+
 section.page_section{
   width: 100%;
   min-height: 100vh;
   /* max-width: 1700px; */
   margin: 0 auto;
-
+  transition: background-color 0.3s ease, background 0.3s ease;
 }
+
+.dark section.page_section {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 50%, #1a2d4a 100%);
+}
+
 .alert_container{
   position: fixed;
   width: 100%;
@@ -54,7 +73,13 @@ section.page_section{
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease;
 }
+
+.dark .loading_component {
+  background-color: rgba(26, 26, 26, 0.9);
+}
+
 .disabled_link_text{
   color: rgba(128, 128, 128, 0.534) !important;
   cursor: default;

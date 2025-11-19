@@ -72,7 +72,7 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <section className="min-h-[calc(100vh-100px)] bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+    <section className="min-h-[calc(100vh-100px)] bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
       <div className="flex h-[calc(100vh-100px)] gap-0 md:gap-4 p-0 md:p-4 overflow-hidden relative">
         {isMobile ? (
           <>
@@ -105,7 +105,7 @@ const ChatPage = () => {
                 onNewChat={() => setNewChatDialogOpen(true)}
               />
             </div>
-            <div className="flex-1 flex flex-col md:rounded-lg md:border md:border-gray-200 md:overflow-hidden md:shadow-lg bg-white">
+            <div className="flex-1 flex flex-col md:rounded-lg md:border md:border-gray-200 dark:border-gray-700 md:overflow-hidden md:shadow-lg bg-white dark:bg-gray-800 transition-colors duration-300">
               <ChatWindow chat={selectedChat} />
             </div>
           </>

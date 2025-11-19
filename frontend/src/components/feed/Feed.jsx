@@ -95,7 +95,7 @@ const Feed = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-64px)] flex flex-col gap-6 p-4 md:p-6 bg-gray-100 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px]">
+      <div className="min-h-[calc(100vh-64px)] flex flex-col gap-6 p-4 md:p-6 bg-gray-100 dark:bg-gray-900 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] [background-size:16px_16px] transition-colors duration-300">
         {[1, 2, 3].map((i) => (
           <PostSkeleton key={i} />
         ))}
@@ -104,12 +104,12 @@ const Feed = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-[calc(100vh-64px)] bg-gray-100 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px]">
+    <div className="flex flex-col md:flex-row min-h-[calc(100vh-64px)] bg-gray-100 dark:bg-gray-900 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] [background-size:16px_16px] transition-colors duration-300">
       {/* Mobile Action Bar */}
-      <div className="md:hidden sticky top-0 z-10 bg-white shadow-md p-4 flex gap-4">
+      <div className="md:hidden sticky top-0 z-10 bg-white dark:bg-gray-800 shadow-md p-4 flex gap-4 transition-colors duration-300">
         <button 
           onClick={handleYourPosts}
-          className="flex-1 bg-white hover:bg-gray-50 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm transition-all hover:shadow"
+          className="flex-1 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm transition-all hover:shadow"
         >
           Your Posts
         </button>
@@ -122,11 +122,11 @@ const Feed = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block w-64 bg-white shadow-md p-6 space-y-4 h-fit sticky top-20">
-        <h2 className="text-xl font-semibold text-gray-800 mb-6">Actions</h2>
+      <div className="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md p-6 space-y-4 h-fit sticky top-20 transition-colors duration-300">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-6">Actions</h2>
         <button 
           onClick={handleYourPosts}
-          className="w-full bg-white hover:bg-gray-50 text-gray-800 font-semibold py-2 px-4 border border-gray-300 rounded-lg shadow-sm transition-all hover:shadow"
+          className="w-full bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm transition-all hover:shadow"
         >
           Your Posts
         </button>
@@ -172,7 +172,7 @@ const Feed = () => {
           <div className="animate-fade-in">
             <button
               onClick={handleBackToFeed}
-              className="mb-4 text-blue-500 flex items-center hover:text-blue-600 transition-colors"
+              className="mb-4 text-blue-500 dark:text-blue-400 flex items-center hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
             >
               <svg
                 className="w-5 h-5 mr-2"
@@ -192,7 +192,7 @@ const Feed = () => {
             <YourPosts />
           </div>
         ) : posts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-gray-500 animate-fade-in">
+          <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-gray-500 dark:text-gray-400 animate-fade-in">
             <svg className="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
@@ -204,7 +204,7 @@ const Feed = () => {
             {posts.map((post, index) => (
               <div 
                 key={post._id} 
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 md:p-6 transition-all hover:shadow-md animate-fade-in"
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 md:p-6 transition-all hover:shadow-md animate-fade-in"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -214,7 +214,7 @@ const Feed = () => {
                       alt={post.userId?.userDetails?.name}
                     />
                     <div className="ml-4">
-                      <h3 className="font-semibold text-lg text-gray-900">
+                      <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
                         {post.userId?.userDetails?.name || "Anonymous"}
                       </h3>
                       <div className="mt-1">
@@ -222,7 +222,7 @@ const Feed = () => {
                       </div>
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(post.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
@@ -234,7 +234,7 @@ const Feed = () => {
                 </div>
 
                 <div className="prose max-w-none mb-6">
-                  <p className="text-gray-800 whitespace-pre-wrap">{post.content}</p>
+                  <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{post.content}</p>
                 </div>
 
                 {post.media && (
@@ -242,18 +242,18 @@ const Feed = () => {
                     <img
                       src={post.media}
                       alt="Post media"
-                      className="w-full h-full object-contain bg-gray-50"
+                      className="w-full h-full object-contain bg-gray-50 dark:bg-gray-700"
                     />
                   </div>
                 )}
 
-                <div className="flex items-center gap-2 py-3 border-t border-gray-100">
+                <div className="flex items-center gap-2 py-3 border-t border-gray-100 dark:border-gray-700">
                   <button
                     onClick={() => handleLike(post._id)}
                     className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
                       post.likes.some(like => like._id === activeUser._id)
                         ? "text-rose-600 bg-rose-50 hover:bg-rose-100"
-                        : "text-gray-500 hover:bg-gray-50"
+                        : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                     }`}
                   >
                     <svg
@@ -273,7 +273,7 @@ const Feed = () => {
 
                   <button
                     onClick={() => handleOpenComments(post)}
-                    className="flex items-center px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors"
+                    className="flex items-center px-4 py-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                   >
                     <ChatBubbleOutlineIcon className="w-5 h-5 mr-2" />
                     {post.comments.length} {post.comments.length === 1 ? 'Comment' : 'Comments'}

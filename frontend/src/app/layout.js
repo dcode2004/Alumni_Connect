@@ -8,6 +8,7 @@ import Head from 'next/head'
 import LoadingAndAlertStates from '@/context/loadingAndAlert/loadingAndAlertStates'
 import ActiveUserAndLoginStatusStates from '@/context/activeUserAndLoginStatus/activeUserAndLoginStatusStates'
 import BatchStates from "../context/batch/batchStates"
+import DarkModeStates from '@/context/darkMode/darkModeStates'
 import App from './App'
 import NextTopLoader from 'nextjs-toploader';
 
@@ -25,18 +26,20 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <body className={`${inter.className}`} >
-          <LoadingAndAlertStates> {/* TOP priority */}
-            <BatchStates>
-              <ActiveUserAndLoginStatusStates>
-                <RegistrationStates>
-                  <NextTopLoader showSpinner={false} />
-                  <App>
-                    {children}
-                  </App>
-                </RegistrationStates>
-              </ActiveUserAndLoginStatusStates>
-            </BatchStates>
-          </LoadingAndAlertStates> {/* TOP priority */}
+          <DarkModeStates>
+            <LoadingAndAlertStates> {/* TOP priority */}
+              <BatchStates>
+                <ActiveUserAndLoginStatusStates>
+                  <RegistrationStates>
+                    <NextTopLoader showSpinner={false} />
+                    <App>
+                      {children}
+                    </App>
+                  </RegistrationStates>
+                </ActiveUserAndLoginStatusStates>
+              </BatchStates>
+            </LoadingAndAlertStates> {/* TOP priority */}
+          </DarkModeStates>
       </body>
     </html>
   )

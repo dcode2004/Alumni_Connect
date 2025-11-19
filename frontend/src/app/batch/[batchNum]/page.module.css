@@ -28,6 +28,10 @@
     color: #088dec;
     margin-bottom: 1rem;
 }
+
+.dark .batch_student_heading {
+    color: #60a5fa;
+}
 .social_links_box{
     width: 80%;
     display: flex;

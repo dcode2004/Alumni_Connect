@@ -48,8 +48,8 @@ const MemoriesSection = () => {
       <div className="absolute top-0 left-0 w-20 h-20 bg-purple-400 rounded-full blur-2xl opacity-30"></div>
       <div className="absolute bottom-0 right-0 w-32 h-32 bg-pink-400 rounded-full blur-3xl opacity-30"></div>
 
-      <div className="relative z-10 text-black">
-        <h1 className="text-3xl md:text-4xl text-center mb-5">
+      <div className="relative z-10 text-black dark:text-white">
+        <h1 className="text-3xl md:text-4xl text-center mb-5 dark:text-white">
           Cherished Memories
         </h1>
         <motion.div

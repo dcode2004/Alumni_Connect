@@ -97,8 +97,8 @@ export default function Gallery() {
       )}
       
       <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Community Gallery</h1>
-        <p className="text-gray-600">Share and explore memorable moments from our community</p>
+        <h1 className="text-3xl font-bold mb-2 dark:text-white transition-colors duration-300">Community Gallery</h1>
+        <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Share and explore memorable moments from our community</p>
       </div>
 
       {(isSpecialUser === "admin" || isSpecialUser === "batchAdmin") && (
@@ -115,7 +115,7 @@ export default function Gallery() {
             </div>
           ))
         ) : images.length === 0 ? (
-          <div className="col-span-full text-center py-8 text-gray-500">
+          <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400 transition-colors duration-300">
             No images have been added to the gallery yet
           </div>
         ) : (

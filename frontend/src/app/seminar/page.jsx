@@ -123,8 +123,8 @@ const SeminarPage = () => {
         {/* Header */}
         <Box sx={{ mb: 4, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <EventIcon sx={{ fontSize: 40, color: "#3584FC" }} />
-            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, color: "#3584FC" }}>
+            <EventIcon sx={{ fontSize: 40, color: "#3584FC" }} className="dark:text-blue-400" />
+            <Typography variant="h4" component="h1" sx={{ fontWeight: 600, color: "#3584FC" }} className="dark:text-blue-400">
               Seminars
             </Typography>
           </Box>
@@ -161,10 +161,10 @@ const SeminarPage = () => {
         </Box>
 
         {/* Tabs */}
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
-            <Tab label={`Upcoming (${seminars.upcoming.length})`} />
-            <Tab label={`Previous (${seminars.previous.length})`} />
+        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }} className="dark:border-gray-600">
+          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)} className="dark:text-white">
+            <Tab label={`Upcoming (${seminars.upcoming.length})`} className="dark:text-gray-300" />
+            <Tab label={`Previous (${seminars.previous.length})`} className="dark:text-gray-300" />
           </Tabs>
         </Box>
 
@@ -179,12 +179,13 @@ const SeminarPage = () => {
                   bgcolor: "#f5f5f5",
                   borderRadius: 2,
                 }}
+                className="dark:bg-gray-800"
               >
-                <EventIcon sx={{ fontSize: 60, color: "#ccc", mb: 2 }} />
-                <Typography variant="h6" color="text.secondary">
+                <EventIcon sx={{ fontSize: 60, color: "#ccc", mb: 2 }} className="dark:text-gray-600" />
+                <Typography variant="h6" color="text.secondary" className="dark:text-gray-300">
                   No upcoming seminars
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }} className="dark:text-gray-400">
                   Check back later for new seminars
                 </Typography>
               </Box>
@@ -211,9 +212,10 @@ const SeminarPage = () => {
                   bgcolor: "#f5f5f5",
                   borderRadius: 2,
                 }}
+                className="dark:bg-gray-800"
               >
-                <EventIcon sx={{ fontSize: 60, color: "#ccc", mb: 2 }} />
-                <Typography variant="h6" color="text.secondary">
+                <EventIcon sx={{ fontSize: 60, color: "#ccc", mb: 2 }} className="dark:text-gray-600" />
+                <Typography variant="h6" color="text.secondary" className="dark:text-gray-300">
                   No previous seminars
                 </Typography>
               </Box>

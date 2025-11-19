@@ -60,7 +60,7 @@ const Batch = () => {
           <div className={styles.batch_main_container}>
             {/* -------- TOP SECTION STARTS :: LATEST BATCHES ------------ */}
             <div className={styles.top_container_latest_two_batches}>
-              <h1 className="text-2xl text-black font-bold mb-5" >Latest batches</h1>
+              <h1 className="text-2xl text-black dark:text-white font-bold mb-5 transition-colors duration-300" >Latest batches</h1>
               <div className={styles.latest_batches_and_create_batch_container}>
                 {/* latest batches */}
                 {allBatches != null ? allBatches
@@ -86,7 +86,7 @@ const Batch = () => {
 
             {/* ---------BOTTOM SECTION STARTS :: PREVIOUS BATCHES ------- */}
             <div className={`${styles.bottom_container_previous_batches} mt-5`}>
-              <h1 className="text-2xl text-black font-bold mb-3" >Previous Batches</h1>
+              <h1 className="text-2xl text-black dark:text-white font-bold mb-3 transition-colors duration-300" >Previous Batches</h1>
               <div className={styles.all_previous_batches}>
                 {allBatches != null ? allBatches
                   .filter(batch => !batch.isLatest)

@@ -131,7 +131,7 @@ const Page = ({ params }) => {
           {isPageExist && (
             <div className={styles.students_container_box} >
               {/* --- BATCH STUDENTS CONTAINER ---- */}
-              <h1 className={styles.batch_student_heading} >{`${batchRoute} batch students`}</h1>
+              <h1 className={`${styles.batch_student_heading} dark:text-white transition-colors duration-300`} >{`${batchRoute} batch students`}</h1>
               
               {/* Search and Filter Section */}
               <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center">
@@ -167,13 +167,13 @@ const Page = ({ params }) => {
                 </Box>
                 
                 {searchTerm && (
-                  <div className="text-sm text-gray-500 whitespace-nowrap">
+                  <div className="text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap transition-colors duration-300">
                     Found: {filteredStudents?.length || 0} students
                   </div>
                 )}
               </div>
 
-              {students != null && students.length === 0 && <h1 className="text-lg" >No students registered yet</h1>}
+              {students != null && students.length === 0 && <h1 className="text-lg dark:text-white transition-colors duration-300" >No students registered yet</h1>}
               <div className={styles.only_students_box} >
                 {students != null ?
                   (filteredStudents || students).map((student, index) => {

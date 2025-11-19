@@ -38,10 +38,11 @@ const SeminarCard = ({ seminar, isUpcoming = true, onEdit, onDelete, isHost = fa
           transform: "translateY(-2px)",
         },
       }}
+      className="dark:bg-gray-800 dark:border-gray-700"
     >
       <CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "start", mb: 2 }}>
-          <Typography variant="h6" component="h3" sx={{ fontWeight: 600, color: "#3584FC", flex: 1 }}>
+          <Typography variant="h6" component="h3" sx={{ fontWeight: 600, color: "#3584FC", flex: 1 }} className="dark:text-blue-400">
             {seminar.title}
           </Typography>
           {isUpcoming && !isPast && (
@@ -66,6 +67,7 @@ const SeminarCard = ({ seminar, isUpcoming = true, onEdit, onDelete, isHost = fa
             variant="body2"
             color="text.secondary"
             sx={{ mb: 2, lineHeight: 1.6 }}
+            className="dark:text-gray-300"
           >
             {seminar.description}
           </Typography>
@@ -74,24 +76,24 @@ const SeminarCard = ({ seminar, isUpcoming = true, onEdit, onDelete, isHost = fa
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           {/* Host */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <PersonIcon sx={{ fontSize: 18, color: "#666" }} />
-            <Typography variant="body2" color="text.secondary">
+            <PersonIcon sx={{ fontSize: 18, color: "#666" }} className="dark:text-gray-400" />
+            <Typography variant="body2" color="text.secondary" className="dark:text-gray-300">
               <strong>Host:</strong> {seminar.hostName || seminar.hostId?.userDetails?.name || "Unknown"}
             </Typography>
           </Box>
 
           {/* Date */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <CalendarTodayIcon sx={{ fontSize: 18, color: "#666" }} />
-            <Typography variant="body2" color="text.secondary">
+            <CalendarTodayIcon sx={{ fontSize: 18, color: "#666" }} className="dark:text-gray-400" />
+            <Typography variant="body2" color="text.secondary" className="dark:text-gray-300">
               <strong>Date:</strong> {formatDate(seminarDate)}
             </Typography>
           </Box>
 
           {/* Time */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <AccessTimeIcon sx={{ fontSize: 18, color: "#666" }} />
-            <Typography variant="body2" color="text.secondary">
+            <AccessTimeIcon sx={{ fontSize: 18, color: "#666" }} className="dark:text-gray-400" />
+            <Typography variant="body2" color="text.secondary" className="dark:text-gray-300">
               <strong>Time:</strong> {seminar.seminarTime}
             </Typography>
           </Box>
@@ -131,7 +133,7 @@ const SeminarCard = ({ seminar, isUpcoming = true, onEdit, onDelete, isHost = fa
 
           {/* Edit/Delete buttons for host */}
           {isHost && (
-            <Box sx={{ display: "flex", gap: 1, mt: 2, pt: 2, borderTop: "1px solid #e0e0e0" }}>
+            <Box sx={{ display: "flex", gap: 1, mt: 2, pt: 2, borderTop: "1px solid #e0e0e0" }} className="dark:border-gray-700">
               <Button
                 variant="outlined"
                 size="small"
