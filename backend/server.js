@@ -17,7 +17,7 @@ const followRoutes = require("./routes/followRoutes");
   try {
     await connectToDatabase(); // here database is connection takes place & a default admin user is created
     // start the server after the connection is ready
-    const port = process.env.PORT || 5000;
+    const port = process.env.PORT || 4000;
     app.listen(port, () => {
       console.log(`Server started in the port ${port}. :) Happy coding`);
     });

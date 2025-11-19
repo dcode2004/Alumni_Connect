@@ -68,13 +68,24 @@ const NavBar = () => {
             </li>
             <li>
               <Link
-                 className={`${
+                className={`${
                   currentUrlPath.startsWith("/batch") && "text-sky-500"
                 }`}
                 shallow={true}
                 href="/batch"
               >
                 Batch
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={`${
+                  currentUrlPath.startsWith("/chat") && "text-sky-500"
+                }`}
+                shallow={true}
+                href="/chat"
+              >
+                Chat
               </Link>
             </li>
             <li>
@@ -112,7 +123,9 @@ const NavBar = () => {
               loginStatus &&
               (isSpecialUser === "admin" ||
                 isSpecialUser === "batchAdmin" ||
-                isSpecialUser === "superAdmin") && activeUser !== null && activeUser.status === 1 && (
+                isSpecialUser === "superAdmin") &&
+              activeUser !== null &&
+              activeUser.status === 1 && (
                 <Link
                   className={`${
                     currentUrlPath === "/admin/users" && "text-sky-500"
@@ -130,26 +143,29 @@ const NavBar = () => {
             {loginStatus === null ? (
               <UserProfileSkeleton />
             ) : loginStatus ? (
-               (activeUser === null ) ? <UserProfileSkeleton /> :
-               <Link href={"/profile"}>
-                <div
-                  onClick={redirectProfilePage}
-                  className={styles.avatar_name_for_desktop}
-                >
+              activeUser === null ? (
+                <UserProfileSkeleton />
+              ) : (
+                <Link href={"/profile"}>
                   <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "end",
-                      marginRight: "0.5rem",
-                    }}
+                    onClick={redirectProfilePage}
+                    className={styles.avatar_name_for_desktop}
                   >
-                    <UserName name={name} />
-                    <VerificationStatus status={status} />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "end",
+                        marginRight: "0.5rem",
+                      }}
+                    >
+                      <UserName name={name} />
+                      <VerificationStatus status={status} />
+                    </div>
+                    <UserAvatar userName={name} profileUrl={url} />
                   </div>
-                  <UserAvatar userName={name} profileUrl={url} />
-                </div>
-              </Link>
+                </Link>
+              )
             ) : (
               <div>
                 <Link
@@ -186,7 +202,7 @@ const NavBar = () => {
             {loginStatus === null ? (
               <UserProfileSkeleton mobileMode={true} />
             ) : loginStatus ? (
-              (activeUser === null) ? (
+              activeUser === null ? (
                 <UserProfileSkeleton mobileMode={true} />
               ) : (
                 <Link href="/profile">

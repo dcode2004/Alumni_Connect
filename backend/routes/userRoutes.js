@@ -181,7 +181,7 @@ router.post("/loginViaGoogle", async (req, res) => {
     if (isExist) {
       // Get client IP address
       const clientIP = getClientIP(req);
-      
+
       // Prepare location data
       let locationData = {
         latitude: null,
@@ -255,7 +255,7 @@ router.post("/loginManually", async (req, res) => {
       if (isPassMatched) {
         // Get client IP address
         const clientIP = getClientIP(req);
-        
+
         // Prepare location data
         let locationData = {
           latitude: null,
@@ -338,6 +338,60 @@ router.get("/fetchUser", authorizeUser, async (req, res) => {
       success: false,
       message: "Some internal server occurred! Try after some time",
     });
+  }
+});
+
+// ROUTE :: search users (by name / email / regNum) - authorized users only
+router.get("/search", authorizeUser, async (req, res) => {
+  try {
+    const q = req.query.q || "";
+    if (!q || q.trim().length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Query is required" });
+    }
+    const regex = new RegExp(q.trim(), "i");
+    const users = await User.find({
+      $or: [
+        { "userDetails.name": regex },
+        { email: regex },
+        { "userDetails.regNum": regex },
+      ],
+    })
+      .select("_id email userDetails.name batchNum profilePic isSpecialUser")
+      .limit(50);
+
+    return res.json({ success: true, users });
+  } catch (error) {
+    console.error("Error in user search:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+});
+
+// ROUTE :: get public user info by id (authorized)
+router.get("/getById/:userId", authorizeUser, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "userId is required" });
+    }
+    const user = await User.findById(userId).select(
+      "_id email userDetails.name profilePic.url batchNum"
+    );
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    return res.json({ success: true, user });
+  } catch (error) {
+    console.error("Error fetching user by id:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 });
 

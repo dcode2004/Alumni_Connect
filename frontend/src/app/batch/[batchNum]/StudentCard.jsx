@@ -140,7 +140,7 @@ const StudentCard = (props) => {
               <></>
             :
               <p className="flex flex-col mb-2" >
-                <span className="block text-xs text-sky-400 text-center" >field of Interest</span>
+                <span className="block text-xs text-sky-400 text-center" >Field of Interest</span>
                 <span className="block text-sm text-center" >{fieldOfInterest}</span>
               </p>
             }
