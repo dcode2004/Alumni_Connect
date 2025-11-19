@@ -11,6 +11,7 @@ import loadingAndAlertContext from '@/context/loadingAndAlert/loadingAndAlertCon
 import activeUserAndLoginStatus from '@/context/activeUserAndLoginStatus/activeUserAndLoginStatusContext'
 import useWindowSize from '@/components/WindoSizeHook'
 import Link from "next/link";
+import ChatbotWidget from '@/components/chatbot/ChatbotWidget';
 
 
 
@@ -55,6 +56,7 @@ const App = ({ children }) => {
                 {children}
                 <br />
                 <Footer />
+                <ChatbotWidget />
             </Provider>
         </>
     )

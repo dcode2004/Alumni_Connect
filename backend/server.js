@@ -43,6 +43,7 @@ app.use("/api/gallery", galleryRoutes);
 app.use("/api/batch", batchRoutes);
 app.use("/api/follow", followRoutes);
 app.use("/api/seminar", require("./routes/seminarRoutes"));
+app.use("/api/chatbot", require("./routes/chatbotRoutes"));
 app.use("/api/coordinators/", require("./routes/coordinators"));
 app.use("/api/accounts", require("./routes/adminRoutes")); // fetches all users account for admin page
 
