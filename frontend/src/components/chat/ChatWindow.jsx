@@ -222,38 +222,69 @@ const ChatWindow = ({ chat, onBack }) => {
                 }`}
               >
                 {!mine && (
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-300 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-gray-700 overflow-hidden">
-                    {senderProfiles[m.senderId]?.profilePic?.url ? (
-                      <img
-                        src={senderProfiles[m.senderId].profilePic.url}
-                        alt={m.senderName || "Sender"}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span>
-                        {m.senderName?.charAt(0).toUpperCase() || "?"}
-                      </span>
+                  <div className="flex flex-col w-full">
+                    {chat.type === "group" && (
+                      <div className="text-xs text-gray-600 mb-1 ml-10">
+                        {m.senderName || "User"}
+                      </div>
                     )}
+                    <div className="flex gap-2">
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-300 flex-shrink-0 flex items-center justify-center text-xs font-semibold text-gray-700 overflow-hidden">
+                        {senderProfiles[m.senderId]?.profilePic?.url ? (
+                          <img
+                            src={senderProfiles[m.senderId].profilePic.url}
+                            alt={m.senderName || "Sender"}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span>
+                            {m.senderName?.charAt(0).toUpperCase() || "?"}
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        className={`${
+                          mine
+                            ? "bg-sky-600 text-white shadow-md"
+                            : "bg-white text-gray-900 border border-gray-100 shadow-sm"
+                        } max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-lg`}
+                      >
+                        <div className="text-sm break-words">{m.text}</div>
+                        <div
+                          className={`text-xs mt-1 text-right ${
+                            mine ? "text-sky-100" : "text-gray-400"
+                          }`}
+                        >
+                          {m.createdAt?.toDate
+                            ? m.createdAt.toDate().toLocaleTimeString()
+                            : ""}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
-                <div
-                  className={`${
-                    mine
-                      ? "bg-sky-600 text-white shadow-md"
-                      : "bg-white text-gray-900 border border-gray-100 shadow-sm"
-                  } max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-lg`}
-                >
-                  <div className="text-sm break-words">{m.text}</div>
-                  <div
-                    className={`text-xs mt-1 text-right ${
-                      mine ? "text-sky-100" : "text-gray-400"
-                    }`}
-                  >
-                    {m.createdAt?.toDate
-                      ? m.createdAt.toDate().toLocaleTimeString()
-                      : ""}
+                {mine && (
+                  <div className="flex gap-2 w-full justify-end">
+                    <div
+                      className={`${
+                        mine
+                          ? "bg-sky-600 text-white shadow-md"
+                          : "bg-white text-gray-900 border border-gray-100 shadow-sm"
+                      } max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-lg`}
+                    >
+                      <div className="text-sm break-words">{m.text}</div>
+                      <div
+                        className={`text-xs mt-1 text-right ${
+                          mine ? "text-sky-100" : "text-gray-400"
+                        }`}
+                      >
+                        {m.createdAt?.toDate
+                          ? m.createdAt.toDate().toLocaleTimeString()
+                          : ""}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
               </motion.div>
             );
           })}
